@@ -1,4 +1,0 @@
-D:\Programmierung\ING\NotfallExporterUI\TestNotFallExporterLib\obj\Debug\netcoreapp3.1\TestNotFallExporterLib.csprojAssemblyReference.cache
-D:\Programmierung\ING\NotfallExporterUI\TestNotFallExporterLib\obj\Debug\netcoreapp3.1\TestNotFallExporterLib.csproj.CoreCompileInputs.cache
-D:\Programmierung\ING\NotfallExporterUI\TestNotFallExporterLib\obj\Debug\netcoreapp3.1\TestNotFallExporterLib.AssemblyInfoInputs.cache
-D:\Programmierung\ING\NotfallExporterUI\TestNotFallExporterLib\obj\Debug\netcoreapp3.1\TestNotFallExporterLib.AssemblyInfo.cs
