@@ -1,0 +1,16 @@
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.csprojAssemblyReference.cache
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.Form1.resources
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.Properties.Resources.resources
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.csproj.GenerateResource.cache
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.csproj.CoreCompileInputs.cache
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\NotfallExporterUI.exe.config
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\NotfallExporterUI.exe
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\NotfallExporterUI.pdb
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\log4net.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\NotfallExporterLib.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\System.IO.Abstractions.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\NotfallExporterLib.pdb
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\bin\Debug\log4net.xml
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.csproj.CopyComplete
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.exe
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterUI\obj\Debug\NotfallExporterUI.pdb

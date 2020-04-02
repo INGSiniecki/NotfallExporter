@@ -1,0 +1,11 @@
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\obj\Debug\NotfallExporterLib.csprojAssemblyReference.cache
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\obj\Debug\NotfallExporterLib.csproj.CoreCompileInputs.cache
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\NotfallExporterLib.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\NotfallExporterLib.pdb
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\log4net.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\System.IO.Abstractions.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\System.IO.Abstractions.TestingHelpers.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\bin\Debug\log4net.xml
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\obj\Debug\NotfallExporterLib.csproj.CopyComplete
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\obj\Debug\NotfallExporterLib.dll
+D:\Programmierung\ING\NotfallExporterUI\NotfallExporterLib\obj\Debug\NotfallExporterLib.pdb
