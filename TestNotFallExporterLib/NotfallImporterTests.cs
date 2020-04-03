@@ -8,7 +8,9 @@ using NotfallExporterLib;
 
 namespace TestNotFallExporterLib
 {
-    public class TestNotfallImporter
+    public class NotfallImporterTests
+
+
     {
 
 
@@ -96,7 +98,7 @@ namespace TestNotFallExporterLib
         }
                 
 
-        public TestNotfallImporter()
+        public NotfallImporterTests()
         {
             _fileSystem = FakeFileSystem.createFileSystem();
         }

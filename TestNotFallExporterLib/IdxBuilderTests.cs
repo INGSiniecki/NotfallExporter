@@ -8,7 +8,7 @@ using System.IO;
 
 namespace TestNotFallExporterLib
 {
-    public class TestIdxBuilder
+    public class IdxBuilderTests
     {
         private MockFileSystem _fileSystem;
         [Fact]
@@ -19,7 +19,7 @@ namespace TestNotFallExporterLib
             idxBuilder.setFileSystem(_fileSystem);
 
             //Act
-            Idx idx = idxBuilder.createIdx(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
+            Idx idx = idxBuilder.CreateIdx(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
 
             //Assert
             Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.idx"));
@@ -37,13 +37,13 @@ namespace TestNotFallExporterLib
             //Arrange
             IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error\");
             idxBuilder.setFileSystem(_fileSystem);
-            Action a = () => idxBuilder.createIdx(null);
+            Action a = () => idxBuilder.CreateIdx(null);
 
             //Act and Assert
             Assert.Throws<NullReferenceException>(a);
         }
 
-        public TestIdxBuilder()
+        public IdxBuilderTests()
         {
             _fileSystem = _fileSystem = FakeFileSystem.createFileSystem();
         }

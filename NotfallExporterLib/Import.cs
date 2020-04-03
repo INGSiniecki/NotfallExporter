@@ -30,7 +30,7 @@ namespace NotfallExporterLib
             IdxBuilder idxBuilder = new IdxBuilder(_destDirectory);
             idxBuilder.setFileSystem(_fileSystem);
 
-            _idx = idxBuilder.createIdx(_filePath);
+            _idx = idxBuilder.CreateIdx(_filePath);
 
             //creates the Import File
             if(_filePath.getFileExtension().Equals("eml"))

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NotfallExporterLib;
 using System.IO.Abstractions.TestingHelpers;
-using System.Text;
 using Xunit;
-using NotfallExporterLib;
 
 namespace TestNotFallExporterLib
 {
-    public class TestImport
+    public class ImportTests
     {
         MockFileSystem _fileSystem;
 
@@ -65,7 +62,7 @@ namespace TestNotFallExporterLib
             Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.rdy"));
 
         }
-        public TestImport()
+        public ImportTests()
         {
             _fileSystem = _fileSystem = FakeFileSystem.createFileSystem();
         }

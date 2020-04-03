@@ -12,11 +12,11 @@ namespace NotfallExporterLib
      */
     public class Idx
     {
-        public string _file { get; }
+        public string File { get; }
 
         public Idx(string file)
         {
-            _file = file;
+            File = file;
         }
     }
 }

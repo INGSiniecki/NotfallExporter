@@ -8,6 +8,6 @@ namespace NotfallExporterLib
 {
     interface IIdxBuilder
     {
-         Idx createIdx(string src_file);
+         Idx CreateIdx(string src_file);
     }
 }

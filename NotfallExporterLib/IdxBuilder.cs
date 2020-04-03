@@ -22,7 +22,7 @@ namespace NotfallExporterLib
         }
 
 
-        public Idx createIdx(string src_file)
+        public Idx CreateIdx(string src_file)
         {
             if (!_fileSystem.Directory.Exists(_destPath))
                 throw new DirectoryNotFoundException();
