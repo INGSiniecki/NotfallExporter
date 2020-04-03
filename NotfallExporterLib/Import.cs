@@ -13,16 +13,12 @@ namespace NotfallExporterLib
     /*
      * represents the Import of one File
      */
-    public class Import : FileSystemAbstraction
+    public class Import : ImportModel, IImport, FileSystemAbstraction
     {
-
-        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private string _filePath;
-        private Idx _idx;
-        private string _destDirectory;
-        public Import(string dest_directory, string file, IFileSystem fileSystem = null) : base(fileSystem)
+        public Import(string dest_directory, string file)
         {
+            _fileSystem = new FileSystem();
+
             _destDirectory = dest_directory;
             _filePath = file;
         }
@@ -31,7 +27,9 @@ namespace NotfallExporterLib
         public void start()
         {
             //creating an IdxFile
-            IdxBuilder idxBuilder = new IdxBuilder(_destDirectory, _fileSystem);
+            IdxBuilder idxBuilder = new IdxBuilder(_destDirectory);
+            idxBuilder.setFileSystem(_fileSystem);
+
             _idx = idxBuilder.createIdx(_filePath);
 
             //creates the Import File
@@ -62,7 +60,7 @@ namespace NotfallExporterLib
 
         }
 
-        protected void ZipEml()
+         public void ZipEml()
         {
 
             string zipFilePath = _destDirectory + "\\" + _filePath.GetFileName().removeFileExtension() + ".zip";
@@ -85,6 +83,11 @@ namespace NotfallExporterLib
                     }
                     log.Info(String.Format("File: {0} zipped", _filePath.GetFileName()));
                 }
+        }
+
+        public void setFileSystem(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
         }
     }
 }

@@ -26,11 +26,11 @@ namespace NotfallExporterLib
         public void startJob()
         {
 
-            _notfallImporter.start();
+            _notfallImporter.Start();
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallImporter._model._error_directory;
+                _watcher.Path = _notfallImporter._data._error_directory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -61,7 +61,7 @@ namespace NotfallExporterLib
         }
 
         public void OnChanged(object source, FileSystemEventArgs e) =>
-            _notfallImporter.start();
+            _notfallImporter.Start();
 
 
 

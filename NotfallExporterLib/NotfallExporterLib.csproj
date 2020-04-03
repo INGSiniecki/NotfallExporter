@@ -75,10 +75,15 @@
     <Compile Include="Idx.cs" />
     <Compile Include="IdxBuilder.cs" />
     <Compile Include="IdxModel.cs" />
+    <Compile Include="IIdxBuilder.cs" />
+    <Compile Include="IImport.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="ImportModel.cs" />
+    <Compile Include="ImportData.cs" />
+    <Compile Include="INotfallImporter.cs" />
     <Compile Include="NotfallImporter.cs" />
     <Compile Include="NotfallImportJob.cs" />
+    <Compile Include="NotfallImporterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtension.cs" />
   </ItemGroup>

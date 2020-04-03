@@ -11,15 +11,12 @@ namespace NotfallExporterLib
     /*
      * creates and initializes IdxFiles
      */
-    public class IdxBuilder : FileSystemAbstraction
+    public class IdxBuilder : IdxModel, IIdxBuilder, FileSystemAbstraction
     {
-        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private string _destPath;
-        public IdxBuilder(String path, IFileSystem fileSystem = null) : base(fileSystem)
+        public IdxBuilder(String path)
         {
-            if (!_fileSystem.Directory.Exists(path))
-                throw new DirectoryNotFoundException();
+            _fileSystem = new FileSystem();
 
             _destPath = path;
         }
@@ -27,6 +24,9 @@ namespace NotfallExporterLib
 
         public Idx createIdx(string src_file)
         {
+            if (!_fileSystem.Directory.Exists(_destPath))
+                throw new DirectoryNotFoundException();
+
             StringBuilder text = new StringBuilder();
 
             string[] elements = src_file.GetFileName().removeFileExtension().Split('_');
@@ -47,6 +47,9 @@ namespace NotfallExporterLib
             return new Idx(dest_file);
         }
 
-
+        public void setFileSystem(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
     }
 }

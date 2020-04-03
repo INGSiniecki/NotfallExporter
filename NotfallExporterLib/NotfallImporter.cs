@@ -11,53 +11,52 @@ namespace NotfallExporterLib
     /*
      * manages the NotfallImport
      */
-    public class NotfallImporter : FileSystemAbstraction
+    public class NotfallImporter : NotfallImporterModel, INotfallImporter, FileSystemAbstraction
     {
-        public ImportModel _model { get; set; }
-        private static  log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        public NotfallImporter(ImportModel model, IFileSystem fileSystem = null) : base(fileSystem)
+        
+        public NotfallImporter(ImportData model)
         {
+            _fileSystem = new FileSystem();
+            _data = model;
 
-            _model = model;
 
-            checkModel();
         }
 
         //tests if the directories exist
-        private void checkModel()
+        private void CheckData()
         {
-            if (!_fileSystem.Directory.Exists(_model._error_directory)) 
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _model._error_directory));
+            if (!_fileSystem.Directory.Exists(_data._error_directory)) 
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._error_directory));
 
-            if (!_fileSystem.Directory.Exists(_model._import_directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _model._import_directory));
+            if (!_fileSystem.Directory.Exists(_data._import_directory))
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._import_directory));
 
-            if (!_fileSystem.Directory.Exists(_model._backup_directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _model._backup_directory));
+            if (!_fileSystem.Directory.Exists(_data._backup_directory))
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._backup_directory));
         }
 
         //starts the import 
-        public void start()
+        public void Start()
         {
+            CheckData();
 
-            log.Info(String.Format("Import has been started:\nError-Directory: {0}\nImport-Directory: {1}\nBackup-Directory: {2}", _model._error_directory, _model._import_directory, _model._backup_directory));
+            log.Info(String.Format("Import has been started:\nError-Directory: {0}\nImport-Directory: {1}\nBackup-Directory: {2}", _data._error_directory, _data._import_directory, _data._backup_directory));
 
-            foreach (string importFile in extractImports())
+            foreach (string importFile in ExtractImports())
             {
-                Import import = new Import(_model._import_directory, importFile, _fileSystem);
+                Import import = new Import(_data._import_directory, importFile);
                 import.start();
                 import.CreateRdy();
-                backup(importFile);
+                Backup(importFile);
             }
 
             
         }
 
         //returns all eml and zip file in the error directory
-        protected List<string> extractImports()
+        public List<string> ExtractImports()
         {
-            string[] files = _fileSystem.Directory.GetFiles(_model._error_directory);
+            string[] files = _fileSystem.Directory.GetFiles(_data._error_directory);
 
             List<string> importFiles = new List<string>();
             
@@ -73,10 +72,10 @@ namespace NotfallExporterLib
         }
 
         //moves the Importfiles to the backup directory
-        protected void backup(string file)
+        public void Backup(string file)
         {
             DateTime currentDate = DateTime.Today;
-            string backupDirectoryPath = _model._backup_directory + "\\Backup" + currentDate.ToString("dd_MM_yy");
+            string backupDirectoryPath = _data._backup_directory + "\\Backup" + currentDate.ToString("dd_MM_yy");
 
             //creates a daily-directory in case it doesn't exist.
             if (!_fileSystem.Directory.Exists(backupDirectoryPath))
@@ -91,6 +90,11 @@ namespace NotfallExporterLib
                 _fileSystem.File.Move(file, backupFilePath);
                 log.Info(String.Format("File: {0} moved to Backup-Directory", backupFilePath.GetFileName()));
             }
+        }
+
+        public void setFileSystem(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
         }
     }
 }

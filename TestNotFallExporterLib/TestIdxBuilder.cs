@@ -15,7 +15,8 @@ namespace TestNotFallExporterLib
         public void TestCreateIdx()
         {
             //Arrange
-            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Import", _fileSystem);
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Import");
+            idxBuilder.setFileSystem(_fileSystem);
 
             //Act
             Idx idx = idxBuilder.createIdx(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
@@ -28,21 +29,14 @@ namespace TestNotFallExporterLib
             Assert.Equal("eml;20190220123417;99802;0000009200;",text);
         }
 
-        [Fact]
-        public void TestForNull()
-        {
-            //Arrange
-            Action a = () => new IdxBuilder(null, _fileSystem);
-
-            //Ac
-            Assert.Throws<DirectoryNotFoundException>(a);
-        }
+       
 
         [Fact]
         public void TestCreateIdxForNull()
         {
             //Arrange
-            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error\", _fileSystem);
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error\");
+            idxBuilder.setFileSystem(_fileSystem);
             Action a = () => idxBuilder.createIdx(null);
 
             //Act and Assert

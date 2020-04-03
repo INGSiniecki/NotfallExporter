@@ -4,6 +4,7 @@ using NotfallExporterLib;
 using System.IO.Abstractions.TestingHelpers;
 using System.Collections.Generic;
 using System.IO;
+using NotfallExporterLib;
 
 namespace TestNotFallExporterLib
 {
@@ -16,9 +17,10 @@ namespace TestNotFallExporterLib
         [Fact]
         public void TestDirectoryNotFound()
         {
-            ImportModel model = new ImportModel();
+            ImportData model = new ImportData();
+            NotfallImporter importer = new NotfallImporter(model);
 
-            Action a = () => new NotfallImporter(model);
+            Action a = () => importer.Start();
             Assert.Throws<DirectoryNotFoundException>(a);
 
         }
@@ -27,32 +29,37 @@ namespace TestNotFallExporterLib
         public void TestBackupForNull()
         {
             
-            ImportModel model = CreateModel();
-            NotFallImporterTestHelper importer = new NotFallImporterTestHelper(model, _fileSystem);
+            ImportData model = CreateModel();
+            NotfallImporter importer = new NotfallImporter(model);
+            importer.setFileSystem(_fileSystem);
 
-            Assert.Throws<NullReferenceException>(() => importer.InvokeBackup(null));
+            Assert.Throws<NullReferenceException>(() => importer.Backup(null));
 
         }
 
         [Fact]
         public void TestBackupForFileNotFound()
         {
+            //Arrange
+            ImportData model = CreateModel();
+            NotfallImporter importer = new NotfallImporter(model);
+            importer.setFileSystem(_fileSystem);
 
-            ImportModel model = CreateModel();
-            NotFallImporterTestHelper importer = new NotFallImporterTestHelper(model, _fileSystem);
-
-            Assert.Throws<FileNotFoundException>(() => importer.InvokeBackup("not Existing"));
+            //Act
+            //Assert
+            Assert.Throws<FileNotFoundException>(() => importer.Backup("not Existing"));
 
         }
         [Fact]
         public void TestBackup()
         {
             //Arrange
-            ImportModel model = CreateModel();
-            NotFallImporterTestHelper importer = new NotFallImporterTestHelper(model, _fileSystem);
+            ImportData model = CreateModel();
+            NotfallImporter importer = new NotfallImporter(model);
+            importer.setFileSystem(_fileSystem);
 
             //Act
-            importer.InvokeBackup(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
+            importer.Backup(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
 
             //Assert
             Assert.True(_fileSystem.File.Exists(String.Format(@"c:\NotfallImporter\Backup\Backup{0}\eml_20190220123417_99802_0000009200.eml", DateTime.Today.ToString("dd_MM_yy"))));
@@ -63,11 +70,12 @@ namespace TestNotFallExporterLib
         public void TestExtractImports()
         {
             //Arrange
-            ImportModel model = CreateModel();
-            NotFallImporterTestHelper importer = new NotFallImporterTestHelper(model, _fileSystem);
+            ImportData model = CreateModel();
+            NotfallImporter importer = new NotfallImporter(model);
+            importer.setFileSystem(_fileSystem);
 
             //Act
-            List<string> imports = importer.InvokeExtractImports();
+            List<string> imports = importer.ExtractImports();
 
 
             //Assert
@@ -78,9 +86,9 @@ namespace TestNotFallExporterLib
 
         }
 
-        public ImportModel CreateModel()
+        public ImportData CreateModel()
         {
-            ImportModel model = new ImportModel();
+            ImportData model = new ImportData();
             model._error_directory = @"c:\NotfallImporter\Error";
             model._backup_directory = @"c:\NotfallImporter\Backup";
             model._import_directory = @"c:\NotfallImporter\Import";

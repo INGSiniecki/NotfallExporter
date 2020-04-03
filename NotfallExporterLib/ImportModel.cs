@@ -3,30 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO.Abstractions; 
 
 namespace NotfallExporterLib
 {
-    /*
-     * contains all information for Notfallexporting
-     */
     public class ImportModel
     {
-        public string _import_directory { get; set; }
-        public string _error_directory { get; set; }
-        public string _backup_directory { get; set; }
-        public string _logging_directory { get; set; }
+        protected static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ImportModel(string import_directory, string error_directory, string backup_directory, string logging_directory)
-        {
-            this._import_directory = import_directory;
-            this._error_directory = error_directory;
-            this._backup_directory = backup_directory;
-            this._logging_directory = logging_directory;
-        }
+        protected string _filePath;
+        protected Idx _idx;
+        protected string _destDirectory;
 
-        public ImportModel()
-        {
-
-        }
+        protected IFileSystem _fileSystem;
     }
 }

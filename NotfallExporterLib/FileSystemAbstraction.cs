@@ -11,16 +11,9 @@ namespace NotfallExporterLib
      * Helper class for Testing.
      * Makes it possible to inject a mocking FileSystem into a sub class
      */
-    public class FileSystemAbstraction
+    interface FileSystemAbstraction
     {
-        protected IFileSystem _fileSystem;
-        public FileSystemAbstraction (IFileSystem fileSystem)
-        {
-            if (fileSystem == null)
-                _fileSystem = new FileSystem();
-            else
-            _fileSystem = fileSystem;
-        }
+         void setFileSystem(IFileSystem fileSystem);
             
     }
 }

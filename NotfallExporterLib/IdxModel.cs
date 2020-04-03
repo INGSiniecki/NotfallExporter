@@ -9,7 +9,9 @@ namespace NotfallExporterLib
 {
     public class IdxModel
     {
-        private IFileInfo _file;
+        protected static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected string _destPath;
 
+        protected IFileSystem _fileSystem;
     }
 }
