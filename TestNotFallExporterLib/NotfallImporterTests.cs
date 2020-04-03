@@ -91,9 +91,9 @@ namespace TestNotFallExporterLib
         public ImportData CreateModel()
         {
             ImportData model = new ImportData();
-            model._error_directory = @"c:\NotfallImporter\Error";
-            model._backup_directory = @"c:\NotfallImporter\Backup";
-            model._import_directory = @"c:\NotfallImporter\Import";
+            model.Error_Directory = @"c:\NotfallImporter\Error";
+            model.Backup_Directory = @"c:\NotfallImporter\Backup";
+            model.Import_Directory = @"c:\NotfallImporter\Import";
             return model;
         }
                 

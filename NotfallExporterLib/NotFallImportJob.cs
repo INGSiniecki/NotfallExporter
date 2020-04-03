@@ -30,7 +30,7 @@ namespace NotfallExporterLib
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallImporter._data._error_directory;
+                _watcher.Path = _notfallImporter.Data.Error_Directory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.

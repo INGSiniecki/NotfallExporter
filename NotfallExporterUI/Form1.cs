@@ -51,9 +51,9 @@ namespace NotfallExporterUI
         private void button_startImport_Click(object sender, EventArgs e)
         {
             ImportData model = new ImportData();
-            model._error_directory = textBoxError.Text;
-            model._import_directory = textBoxImport.Text;
-            model._backup_directory = textBoxBackup.Text;
+            model.Error_Directory = textBoxError.Text;
+            model.Import_Directory = textBoxImport.Text;
+            model.Backup_Directory = textBoxBackup.Text;
 
             NotfallImporter importer = new NotfallImporter(model);
 

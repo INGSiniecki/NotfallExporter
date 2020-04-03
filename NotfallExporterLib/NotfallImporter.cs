@@ -17,7 +17,7 @@ namespace NotfallExporterLib
         public NotfallImporter(ImportData model)
         {
             _fileSystem = new FileSystem();
-            _data = model;
+            Data = model;
 
 
         }
@@ -25,14 +25,14 @@ namespace NotfallExporterLib
         //tests if the directories exist
         private void CheckData()
         {
-            if (!_fileSystem.Directory.Exists(_data._error_directory)) 
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._error_directory));
+            if (!_fileSystem.Directory.Exists(Data.Error_Directory)) 
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Error_Directory));
 
-            if (!_fileSystem.Directory.Exists(_data._import_directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._import_directory));
+            if (!_fileSystem.Directory.Exists(Data.Import_Directory))
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Import_Directory));
 
-            if (!_fileSystem.Directory.Exists(_data._backup_directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", _data._backup_directory));
+            if (!_fileSystem.Directory.Exists(Data.Backup_Directory))
+                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Backup_Directory));
         }
 
         //starts the import 
@@ -40,11 +40,11 @@ namespace NotfallExporterLib
         {
             CheckData();
 
-            log.Info(String.Format("Import has been started:\nError-Directory: {0}\nImport-Directory: {1}\nBackup-Directory: {2}", _data._error_directory, _data._import_directory, _data._backup_directory));
+            log.Info(String.Format("Import has been started:\nError-Directory: {0}\nImport-Directory: {1}\nBackup-Directory: {2}", Data.Error_Directory, Data.Import_Directory, Data.Backup_Directory));
 
             foreach (string importFile in ExtractImports())
             {
-                Import import = new Import(_data._import_directory, importFile);
+                Import import = new Import(Data.Import_Directory, importFile);
                 import.start();
                 import.CreateRdy();
                 Backup(importFile);
@@ -56,7 +56,7 @@ namespace NotfallExporterLib
         //returns all eml and zip file in the error directory
         public List<string> ExtractImports()
         {
-            string[] files = _fileSystem.Directory.GetFiles(_data._error_directory);
+            string[] files = _fileSystem.Directory.GetFiles(Data.Error_Directory);
 
             List<string> importFiles = new List<string>();
             
@@ -75,7 +75,7 @@ namespace NotfallExporterLib
         public void Backup(string file)
         {
             DateTime currentDate = DateTime.Today;
-            string backupDirectoryPath = _data._backup_directory + "\\Backup" + currentDate.ToString("dd_MM_yy");
+            string backupDirectoryPath = Data.Backup_Directory + "\\Backup" + currentDate.ToString("dd_MM_yy");
 
             //creates a daily-directory in case it doesn't exist.
             if (!_fileSystem.Directory.Exists(backupDirectoryPath))

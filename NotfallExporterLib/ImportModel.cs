@@ -14,7 +14,6 @@ namespace NotfallExporterLib
         protected string _filePath;
         protected Idx _idx;
         protected string _destDirectory;
-
         protected IFileSystem _fileSystem;
     }
 }

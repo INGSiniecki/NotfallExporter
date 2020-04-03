@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NotfallExporterLib
+﻿namespace NotfallExporterLib
 {
     /*
      * contains all information for Notfallexporting
      */
     public class ImportData
     {
-        public string _import_directory { get; set; }
-        public string _error_directory { get; set; }
-        public string _backup_directory { get; set; }
-        public string _logging_directory { get; set; }
+        public string Import_Directory { get; set; }
+        public string Error_Directory { get; set; }
+        public string Backup_Directory { get; set; }
 
-        public ImportData(string import_directory, string error_directory, string backup_directory, string logging_directory)
+        public ImportData(string import_directory, string error_directory, string backup_directory)
         {
-            this._import_directory = import_directory;
-            this._error_directory = error_directory;
-            this._backup_directory = backup_directory;
-            this._logging_directory = logging_directory;
+            this.Import_Directory = import_directory;
+            this.Error_Directory = error_directory;
+            this.Backup_Directory = backup_directory;
         }
 
         public ImportData()
