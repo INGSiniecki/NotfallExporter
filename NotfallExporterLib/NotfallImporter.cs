@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.IO;
+using System.Xml;
+
 namespace NotfallExporterLib
 {
 
@@ -25,14 +27,14 @@ namespace NotfallExporterLib
         //tests if the directories exist
         private void CheckData()
         {
-            if (!_fileSystem.Directory.Exists(Data.Error_Directory)) 
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Error_Directory));
+            if (!_fileSystem.Directory.Exists(Data.ErrorDirectory)) 
+                throw new DirectoryNotFoundException($"{Data.ErrorDirectory} konnte nicht gefunden werden");
 
-            if (!_fileSystem.Directory.Exists(Data.Import_Directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Import_Directory));
+            if (!_fileSystem.Directory.Exists(Data.ImportDirectory))
+                throw new DirectoryNotFoundException($"{Data.ImportDirectory} konnte nicht gefunden werden");
 
-            if (!_fileSystem.Directory.Exists(Data.Backup_Directory))
-                throw new DirectoryNotFoundException(String.Format("{0} konnte nicht gefunden werden", Data.Backup_Directory));
+            if (!_fileSystem.Directory.Exists(Data.BackupDirectory))
+                throw new DirectoryNotFoundException($"{Data.BackupDirectory} konnte nicht gefunden werden");
         }
 
         //starts the import 
@@ -40,12 +42,21 @@ namespace NotfallExporterLib
         {
             CheckData();
 
-            log.Info(String.Format("Import has been started:\nError-Directory: {0}\nImport-Directory: {1}\nBackup-Directory: {2}", Data.Error_Directory, Data.Import_Directory, Data.Backup_Directory));
+            log.Info($"Import has been started:\nError-Directory: {Data.ErrorDirectory}\nImport-Directory: {Data.ImportDirectory}\nBackup-Directory: {Data.BackupDirectory}");
+
+            IdxBuilder idxBuilder = new IdxBuilder(Data.ImportDirectory);
+            idxBuilder.SetFileSystem(_fileSystem);
+
+            idxBuilder.AccountConfig = new XmlDocument();
+            idxBuilder.AccountConfig.Load(_fileSystem.File.OpenRead(Data.AccountConfig));
+
+            idxBuilder.IdxIndexSpecification = new XmlDocument();
+            idxBuilder.IdxIndexSpecification.Load(_fileSystem.File.OpenRead(Data.IdxIndexSpecification));
 
             foreach (string importFile in ExtractImports())
             {
-                Import import = new Import(Data.Import_Directory, importFile);
-                import.start();
+                Import import = new Import(Data.ImportDirectory, importFile);
+                import.Start(idxBuilder);
                 import.CreateRdy();
                 Backup(importFile);
             }
@@ -56,17 +67,17 @@ namespace NotfallExporterLib
         //returns all eml and zip file in the error directory
         public List<string> ExtractImports()
         {
-            string[] files = _fileSystem.Directory.GetFiles(Data.Error_Directory);
+            string[] files = _fileSystem.Directory.GetFiles(Data.ErrorDirectory);
 
             List<string> importFiles = new List<string>();
             
             for(int i = 0; i < files.Length; i++)
             {
-                if (files[i].getFileExtension().Equals("eml") || files[i].getFileExtension().Equals("zip"))
+                if (files[i].GetFileExtension().Equals("eml") || files[i].GetFileExtension().Equals("zip"))
                     importFiles.Add(files[i]);
             }
 
-            log.Info(String.Format("{0} Import Files found", importFiles.ToArray().Length));
+            log.Info($"{importFiles.ToArray().Length} Import Files found");
 
             return importFiles;
         }
@@ -75,24 +86,24 @@ namespace NotfallExporterLib
         public void Backup(string file)
         {
             DateTime currentDate = DateTime.Today;
-            string backupDirectoryPath = Data.Backup_Directory + "\\Backup" + currentDate.ToString("dd_MM_yy");
+            string backupDirectoryPath = Path.Combine(Data.BackupDirectory,"Backup",currentDate.ToString("dd_MM_yy"));
 
             //creates a daily-directory in case it doesn't exist.
             if (!_fileSystem.Directory.Exists(backupDirectoryPath))
                 _fileSystem.Directory.CreateDirectory(backupDirectoryPath);
 
-            string backupFilePath = backupDirectoryPath + "\\" + file.GetFileName();
+            string backupFilePath = Path.Combine(backupDirectoryPath, file.GetFileName());
 
             if (_fileSystem.File.Exists(backupFilePath))
-                log.Warn(String.Format("File: {0} already exists in Backup-Directory", backupFilePath.GetFileName()));
+                log.Warn($"File: {backupFilePath.GetFileName()} already exists in Backup-Directory" );
             else
             {
                 _fileSystem.File.Move(file, backupFilePath);
-                log.Info(String.Format("File: {0} moved to Backup-Directory", backupFilePath.GetFileName()));
+                log.Info($"File: {backupFilePath.GetFileName()} moved to Backup-Directory");
             }
         }
 
-        public void setFileSystem(IFileSystem fileSystem)
+        public void SetFileSystem(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }

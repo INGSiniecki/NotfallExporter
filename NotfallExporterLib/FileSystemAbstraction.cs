@@ -13,7 +13,7 @@ namespace NotfallExporterLib
      */
     interface FileSystemAbstraction
     {
-         void setFileSystem(IFileSystem fileSystem);
+         void SetFileSystem(IFileSystem fileSystem);
             
     }
 }

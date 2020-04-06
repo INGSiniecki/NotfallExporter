@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NotfallExporterLib
 {
-    interface IImport
+    public class NotfallImportJobModel
     {
-
-        void Start(IdxBuilder idxBuilder);
-
-
-        void CreateRdy();
-
-
-         string ZipEml();
-        
+        protected NotfallImporter _notfallImporter;
+        protected FileSystemWatcher _watcher;
     }
 }

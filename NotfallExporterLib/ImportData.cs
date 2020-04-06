@@ -5,15 +5,18 @@
      */
     public class ImportData
     {
-        public string Import_Directory { get; set; }
-        public string Error_Directory { get; set; }
-        public string Backup_Directory { get; set; }
+        public string ImportDirectory { get; set; }
+        public string ErrorDirectory { get; set; }
+        public string BackupDirectory { get; set; }
 
-        public ImportData(string import_directory, string error_directory, string backup_directory)
+        public string AccountConfig;
+        public string IdxIndexSpecification;
+
+        public ImportData(string importDirectory, string errorDirectory, string backupDirectory)
         {
-            this.Import_Directory = import_directory;
-            this.Error_Directory = error_directory;
-            this.Backup_Directory = backup_directory;
+            this.ImportDirectory = importDirectory;
+            this.ErrorDirectory = errorDirectory;
+            this.BackupDirectory = backupDirectory;
         }
 
         public ImportData()

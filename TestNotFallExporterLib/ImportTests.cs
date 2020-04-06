@@ -9,37 +9,42 @@ namespace TestNotFallExporterLib
         MockFileSystem _fileSystem;
 
         [Fact]
-        public void testStartForZip()
+        public void TestStartForZip()
         {
             //Arrange
             Import import = new Import(@"c:\NotfallImporter\Import",  @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.setFileSystem(_fileSystem);
+            import.SetFileSystem(_fileSystem);
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
+
+
             //Act
-            import.start();
+            import.Start(idxBuilder);
             //Assert
             Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
             
         }
 
         [Fact]
-        public void testStartForEml()
+        public void TestStartForEml()
         {
             //Arrange
             Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
-            import.setFileSystem(_fileSystem);
+            import.SetFileSystem(_fileSystem);
+
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
             //Act
-            import.start();
+            import.Start(idxBuilder);
             //Assert
             Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.zip"));
 
         }
 
         [Fact]
-        public void testCreateRdyForFilesNotExisting()
+        public void TestCreateRdyForFilesNotExisting()
         {
             //Arrange
             Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.setFileSystem(_fileSystem);
+            import.SetFileSystem(_fileSystem);
             //Act
             import.CreateRdy();
 
@@ -49,12 +54,15 @@ namespace TestNotFallExporterLib
         }
 
         [Fact]
-        public void testCreateRdyForFilesExisting()
+        public void TestCreateRdyForFilesExisting()
         {
             //Arrange
             Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.setFileSystem(_fileSystem);
-            import.start();
+            import.SetFileSystem(_fileSystem);
+
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
+
+            import.Start(idxBuilder);
             //Act
             import.CreateRdy();
 
@@ -64,7 +72,7 @@ namespace TestNotFallExporterLib
         }
         public ImportTests()
         {
-            _fileSystem = _fileSystem = FakeFileSystem.createFileSystem();
+            _fileSystem = _fileSystem = FakeFileSystem.CreateFileSystem();
         }
     }
 }

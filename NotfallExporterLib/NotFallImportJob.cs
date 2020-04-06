@@ -12,10 +12,8 @@ namespace NotfallExporterLib
     /*
      * class for continous NotfallImport
      */
-    public class NotfallImportJob
+    public class NotfallImportJob : NotfallImportJobModel, INotfallImportJob
     {
-        NotfallImporter _notfallImporter;
-        FileSystemWatcher _watcher;
 
         public NotfallImportJob(NotfallImporter notfallImporter)
         {
@@ -23,14 +21,14 @@ namespace NotfallExporterLib
         }
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public void startJob()
+        public void StartJob()
         {
 
             _notfallImporter.Start();
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallImporter.Data.Error_Directory;
+                _watcher.Path = _notfallImporter.Data.ErrorDirectory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -49,7 +47,7 @@ namespace NotfallExporterLib
 
         }
 
-        public void stopJob()
+        public void StopJob()
         {
             _watcher.Dispose();
             _watcher = null;

@@ -33,7 +33,7 @@ namespace TestNotFallExporterLib
             
             ImportData model = CreateModel();
             NotfallImporter importer = new NotfallImporter(model);
-            importer.setFileSystem(_fileSystem);
+            importer.SetFileSystem(_fileSystem);
 
             Assert.Throws<NullReferenceException>(() => importer.Backup(null));
 
@@ -45,7 +45,7 @@ namespace TestNotFallExporterLib
             //Arrange
             ImportData model = CreateModel();
             NotfallImporter importer = new NotfallImporter(model);
-            importer.setFileSystem(_fileSystem);
+            importer.SetFileSystem(_fileSystem);
 
             //Act
             //Assert
@@ -58,7 +58,7 @@ namespace TestNotFallExporterLib
             //Arrange
             ImportData model = CreateModel();
             NotfallImporter importer = new NotfallImporter(model);
-            importer.setFileSystem(_fileSystem);
+            importer.SetFileSystem(_fileSystem);
 
             //Act
             importer.Backup(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
@@ -74,7 +74,7 @@ namespace TestNotFallExporterLib
             //Arrange
             ImportData model = CreateModel();
             NotfallImporter importer = new NotfallImporter(model);
-            importer.setFileSystem(_fileSystem);
+            importer.SetFileSystem(_fileSystem);
 
             //Act
             List<string> imports = importer.ExtractImports();
@@ -91,16 +91,16 @@ namespace TestNotFallExporterLib
         public ImportData CreateModel()
         {
             ImportData model = new ImportData();
-            model.Error_Directory = @"c:\NotfallImporter\Error";
-            model.Backup_Directory = @"c:\NotfallImporter\Backup";
-            model.Import_Directory = @"c:\NotfallImporter\Import";
+            model.ErrorDirectory = @"c:\NotfallImporter\Error";
+            model.BackupDirectory = @"c:\NotfallImporter\Backup";
+            model.ImportDirectory = @"c:\NotfallImporter\Import";
             return model;
         }
                 
 
         public NotfallImporterTests()
         {
-            _fileSystem = FakeFileSystem.createFileSystem();
+            _fileSystem = FakeFileSystem.CreateFileSystem();
         }
     }
 }

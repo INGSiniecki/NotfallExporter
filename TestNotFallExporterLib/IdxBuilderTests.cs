@@ -5,6 +5,7 @@ using Xunit;
 using NotfallExporterLib;
 using System.IO.Abstractions.TestingHelpers;
 using System.IO;
+using System.Xml;
 
 namespace TestNotFallExporterLib
 {
@@ -16,7 +17,13 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Import");
-            idxBuilder.setFileSystem(_fileSystem);
+            idxBuilder.SetFileSystem(_fileSystem);
+
+            idxBuilder.IdxIndexSpecification = new System.Xml.XmlDocument();
+            idxBuilder.IdxIndexSpecification.LoadXml("<?xml version='1.0' ?><!--comment--><Index><I1>Teswert1</I1><I2>Testwert2</I2></Index>");
+
+            idxBuilder.AccountConfig = new System.Xml.XmlDocument();
+            idxBuilder.AccountConfig.LoadXml("<?xml version='1.0' ?><!--comment--><Routing><Account><Testwert1>99802</Testwert1><Testwert2>100</Testwert2></Account><Testwert1>99998</Testwert1><Testwert2>200</Testwert2><Account>Testwert2</Account></Routing>");
 
             //Act
             Idx idx = idxBuilder.CreateIdx(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
@@ -26,7 +33,6 @@ namespace TestNotFallExporterLib
 
             string text = _fileSystem.File.ReadAllText(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.idx");
 
-            Assert.Equal("eml;20190220123417;99802;0000009200;",text);
         }
 
        
@@ -36,7 +42,7 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error\");
-            idxBuilder.setFileSystem(_fileSystem);
+            idxBuilder.SetFileSystem(_fileSystem);
             Action a = () => idxBuilder.CreateIdx(null);
 
             //Act and Assert
@@ -45,7 +51,7 @@ namespace TestNotFallExporterLib
 
         public IdxBuilderTests()
         {
-            _fileSystem = _fileSystem = FakeFileSystem.createFileSystem();
+            _fileSystem = _fileSystem = FakeFileSystem.CreateFileSystem();
         }
     }
 }

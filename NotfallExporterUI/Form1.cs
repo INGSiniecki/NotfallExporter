@@ -42,7 +42,7 @@ namespace NotfallExporterUI
 
         private void button_stopImport_Click(object sender, EventArgs e)
         {
-            importJob.stopJob();
+            importJob.StopJob();
 
             button_startImport.Enabled = true;
             button_stopImport.Enabled = false;
@@ -51,14 +51,17 @@ namespace NotfallExporterUI
         private void button_startImport_Click(object sender, EventArgs e)
         {
             ImportData model = new ImportData();
-            model.Error_Directory = textBoxError.Text;
-            model.Import_Directory = textBoxImport.Text;
-            model.Backup_Directory = textBoxBackup.Text;
+            model.ErrorDirectory = textBoxError.Text;
+            model.ImportDirectory = textBoxImport.Text;
+            model.BackupDirectory = textBoxBackup.Text;
+
+            model.IdxIndexSpecification = textBoxIndexSpezifikation.Text;
+            model.AccountConfig = textBoxAccountConfig.Text;
 
             NotfallImporter importer = new NotfallImporter(model);
 
             importJob = new NotfallImportJob(importer);
-            importJob.startJob();
+            importJob.StartJob();
 
 
            
@@ -80,6 +83,23 @@ namespace NotfallExporterUI
                 box.Text = folderBrowserDialog.SelectedPath;
         }
 
+        private void FillTextBoxWithFileDialog(TextBox box)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "xml files (*.xml)|*.xml";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    box.Text = openFileDialog.FileName;
+                    
+                }
+            }
+        }
+
         private void buttonImportDurchsuchen_Click(object sender, EventArgs e)
         {
             fillTextBoxWithFolderDialog(textBoxImport);
@@ -93,6 +113,21 @@ namespace NotfallExporterUI
         private void buttonErrorDurchsuchen_Click(object sender, EventArgs e)
         {
             fillTextBoxWithFolderDialog(textBoxError);
+        }
+
+        private void buttonIdexSpezifikationDurchsuchen_Click(object sender, EventArgs e)
+        {
+            FillTextBoxWithFileDialog(textBoxIndexSpezifikation);
+        }
+
+        private void buttonAccountConfigDurchsuchen_Click(object sender, EventArgs e)
+        {
+            FillTextBoxWithFileDialog(textBoxAccountConfig);
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

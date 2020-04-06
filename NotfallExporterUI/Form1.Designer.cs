@@ -39,6 +39,12 @@
             this.buttonBackupDurchsuchen = new System.Windows.Forms.Button();
             this.button_startImport = new System.Windows.Forms.Button();
             this.button_stopImport = new System.Windows.Forms.Button();
+            this.buttonIdexSpezifikationDurchsuchen = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxIndexSpezifikation = new System.Windows.Forms.TextBox();
+            this.buttonAccountConfigDurchsuchen = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxAccountConfig = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBoxError
@@ -123,7 +129,7 @@
             // 
             // button_startImport
             // 
-            this.button_startImport.Location = new System.Drawing.Point(16, 320);
+            this.button_startImport.Location = new System.Drawing.Point(16, 465);
             this.button_startImport.Name = "button_startImport";
             this.button_startImport.Size = new System.Drawing.Size(96, 77);
             this.button_startImport.TabIndex = 17;
@@ -133,7 +139,7 @@
             // 
             // button_stopImport
             // 
-            this.button_stopImport.Location = new System.Drawing.Point(131, 320);
+            this.button_stopImport.Location = new System.Drawing.Point(128, 465);
             this.button_stopImport.Name = "button_stopImport";
             this.button_stopImport.Size = new System.Drawing.Size(96, 77);
             this.button_stopImport.TabIndex = 18;
@@ -141,11 +147,69 @@
             this.button_stopImport.UseVisualStyleBackColor = true;
             this.button_stopImport.Click += new System.EventHandler(this.button_stopImport_Click);
             // 
+            // buttonIdexSpezifikationDurchsuchen
+            // 
+            this.buttonIdexSpezifikationDurchsuchen.Location = new System.Drawing.Point(396, 320);
+            this.buttonIdexSpezifikationDurchsuchen.Name = "buttonIdexSpezifikationDurchsuchen";
+            this.buttonIdexSpezifikationDurchsuchen.Size = new System.Drawing.Size(139, 29);
+            this.buttonIdexSpezifikationDurchsuchen.TabIndex = 21;
+            this.buttonIdexSpezifikationDurchsuchen.Text = "Durchsuchen...";
+            this.buttonIdexSpezifikationDurchsuchen.UseVisualStyleBackColor = true;
+            this.buttonIdexSpezifikationDurchsuchen.Click += new System.EventHandler(this.buttonIdexSpezifikationDurchsuchen_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 297);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(144, 20);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Index-Spezifikation";
+            // 
+            // textBoxIndexSpezifikation
+            // 
+            this.textBoxIndexSpezifikation.Location = new System.Drawing.Point(11, 323);
+            this.textBoxIndexSpezifikation.Name = "textBoxIndexSpezifikation";
+            this.textBoxIndexSpezifikation.Size = new System.Drawing.Size(379, 26);
+            this.textBoxIndexSpezifikation.TabIndex = 19;
+            // 
+            // buttonAccountConfigDurchsuchen
+            // 
+            this.buttonAccountConfigDurchsuchen.Location = new System.Drawing.Point(396, 387);
+            this.buttonAccountConfigDurchsuchen.Name = "buttonAccountConfigDurchsuchen";
+            this.buttonAccountConfigDurchsuchen.Size = new System.Drawing.Size(139, 29);
+            this.buttonAccountConfigDurchsuchen.TabIndex = 24;
+            this.buttonAccountConfigDurchsuchen.Text = "Durchsuchen...";
+            this.buttonAccountConfigDurchsuchen.UseVisualStyleBackColor = true;
+            this.buttonAccountConfigDurchsuchen.Click += new System.EventHandler(this.buttonAccountConfigDurchsuchen_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 364);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(119, 20);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "Account-Config";
+            // 
+            // textBoxAccountConfig
+            // 
+            this.textBoxAccountConfig.Location = new System.Drawing.Point(11, 390);
+            this.textBoxAccountConfig.Name = "textBoxAccountConfig";
+            this.textBoxAccountConfig.Size = new System.Drawing.Size(379, 26);
+            this.textBoxAccountConfig.TabIndex = 22;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 490);
+            this.ClientSize = new System.Drawing.Size(584, 636);
+            this.Controls.Add(this.buttonAccountConfigDurchsuchen);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBoxAccountConfig);
+            this.Controls.Add(this.buttonIdexSpezifikationDurchsuchen);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.textBoxIndexSpezifikation);
             this.Controls.Add(this.button_stopImport);
             this.Controls.Add(this.button_startImport);
             this.Controls.Add(this.buttonBackupDurchsuchen);
@@ -159,6 +223,7 @@
             this.Controls.Add(this.textBoxError);
             this.Name = "Form1";
             this.Text = "NotfallImporterUI";
+            this.Load += new System.EventHandler(this.Form1_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,6 +241,12 @@
         private System.Windows.Forms.Button buttonBackupDurchsuchen;
         private System.Windows.Forms.Button button_startImport;
         private System.Windows.Forms.Button button_stopImport;
+        private System.Windows.Forms.Button buttonIdexSpezifikationDurchsuchen;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBoxIndexSpezifikation;
+        private System.Windows.Forms.Button buttonAccountConfigDurchsuchen;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxAccountConfig;
     }
 }
 

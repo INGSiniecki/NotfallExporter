@@ -24,51 +24,50 @@ namespace NotfallExporterLib
         }
 
         //starts the import of the given file
-        public void start()
+        public void Start(IdxBuilder idxBuilder)
         {
-            //creating an IdxFile
-            IdxBuilder idxBuilder = new IdxBuilder(_destDirectory);
-            idxBuilder.setFileSystem(_fileSystem);
-
-            _idx = idxBuilder.CreateIdx(_filePath);
-
+            string importedFilePath; 
             //creates the Import File
-            if(_filePath.getFileExtension().Equals("eml"))
+            if(_filePath.GetFileExtension().Equals("eml"))
             {
-                ZipEml();
+                importedFilePath = ZipEml();
             }
             else
             {
-                _fileSystem.File.Copy(_filePath, _destDirectory + "\\" + _filePath.GetFileName());
+                _fileSystem.File.Copy(_filePath, Path.Combine(_destDirectory, _filePath.GetFileName()));
+                importedFilePath = Path.Combine(_destDirectory, _filePath.GetFileName());
             }
-            log.Info(String.Format("File: {0} imported to Import-Directory", _filePath.GetFileName()));
+            log.Info($"File: {_filePath.GetFileName()} imported to Import-Directory");
+
+            //creating an IdxFile
+            _idx = idxBuilder.CreateIdx(importedFilePath);
 
         }
 
         //creates a .rdy file in the import directory for the given file
         public void CreateRdy()
         {
-            if (_fileSystem.File.Exists(_destDirectory + "\\" + _filePath.GetFileName().removeFileExtension() + ".zip") && _fileSystem.File.Exists(_idx._file))
+            if (_fileSystem.File.Exists(Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension() + ".zip")) && _fileSystem.File.Exists(_idx.File))
             {
-                _fileSystem.File.Create(_destDirectory + "\\" + _filePath.GetFileName().removeFileExtension() + ".rdy");
-                log.Info(String.Format("Rdy File created: {0}\\{1}.rdy", _destDirectory, _filePath.GetFileName().removeFileExtension()));
+                _fileSystem.File.Create(Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension() + ".rdy"));
+                log.Info($"Rdy File created: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
             }
             else
             {
-                log.Error(String.Format("Could not create Rdy File: {0}", _destDirectory + "\\" + _filePath.GetFileName().removeFileExtension() + ".rdy"));
+                log.Error($"Could not create Rdy File: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
             }
 
         }
 
-         public void ZipEml()
+         public string ZipEml()
         {
 
-            string zipFilePath = _destDirectory + "\\" + _filePath.GetFileName().removeFileExtension() + ".zip";
+            string zipFilePath = Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension() + ".zip");
 
            
 
             if (_fileSystem.File.Exists(zipFilePath))
-                log.Warn(String.Format("File: {0} already exists in Import-Directory", zipFilePath.GetFileName()));
+                log.Warn($"File: {zipFilePath.GetFileName()} already exists in Import-Directory");
             else
                 using (ZipArchive archive = new ZipArchive(_fileSystem.File.Create(zipFilePath), ZipArchiveMode.Create))
                 {
@@ -81,11 +80,12 @@ namespace NotfallExporterLib
                             originalFileMemoryStream.CopyTo(zipElementStream);
                         }
                     }
-                    log.Info(String.Format("File: {0} zipped", _filePath.GetFileName()));
+                    log.Info($"File: {_filePath.GetFileName()} zipped");
                 }
+            return zipFilePath;
         }
 
-        public void setFileSystem(IFileSystem fileSystem)
+        public void SetFileSystem(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }
