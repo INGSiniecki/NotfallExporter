@@ -4,7 +4,6 @@ using NotfallExporterLib;
 using System.IO.Abstractions.TestingHelpers;
 using System.Collections.Generic;
 using System.IO;
-using NotfallExporterLib;
 
 namespace TestNotFallExporterLib
 {
@@ -20,10 +19,9 @@ namespace TestNotFallExporterLib
         public void TestDirectoryNotFound()
         {
             ImportData model = new ImportData();
-            NotfallImporter importer = new NotfallImporter(model);
 
-            Action a = () => importer.Start();
-            Assert.Throws<DirectoryNotFoundException>(a);
+            Action a = () => new NotfallImporter(model, _fileSystem);
+            Assert.Throws<ArgumentNullException> (a);
 
         }
 
@@ -32,8 +30,7 @@ namespace TestNotFallExporterLib
         {
             
             ImportData model = CreateModel();
-            NotfallImporter importer = new NotfallImporter(model);
-            importer.SetFileSystem(_fileSystem);
+            NotfallImporter importer = new NotfallImporter(model, _fileSystem);
 
             Assert.Throws<NullReferenceException>(() => importer.Backup(null));
 
@@ -44,8 +41,7 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             ImportData model = CreateModel();
-            NotfallImporter importer = new NotfallImporter(model);
-            importer.SetFileSystem(_fileSystem);
+            NotfallImporter importer = new NotfallImporter(model, _fileSystem);
 
             //Act
             //Assert
@@ -57,15 +53,34 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             ImportData model = CreateModel();
-            NotfallImporter importer = new NotfallImporter(model);
-            importer.SetFileSystem(_fileSystem);
+            NotfallImporter importer = new NotfallImporter(model, _fileSystem);
 
             //Act
             importer.Backup(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
 
             //Assert
-            Assert.True(_fileSystem.File.Exists(String.Format(@"c:\NotfallImporter\Backup\Backup{0}\eml_20190220123417_99802_0000009200.eml", DateTime.Today.ToString("dd_MM_yy"))));
+            Assert.True(_fileSystem.File.Exists($@"c:\NotfallImporter\Backup\Backup{DateTime.Today.ToString("dd_MM_yy")}\eml_20190220123417_99802_0000009200.eml"));
 
+        }
+
+        [Fact]
+        public void TestStart()
+        {
+            //Arrange
+            ImportData model = CreateModel();
+            NotfallImporter importer = new NotfallImporter(model, _fileSystem);
+
+            //Act
+            importer.Start();
+
+            //Assert
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.idx"));
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.rdy"));
+
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.zip"));
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.idx"));
+            Assert.True(_fileSystem.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.rdy"));
         }
 
         [Fact]
@@ -73,8 +88,7 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             ImportData model = CreateModel();
-            NotfallImporter importer = new NotfallImporter(model);
-            importer.SetFileSystem(_fileSystem);
+            NotfallImporter importer = new NotfallImporter(model, _fileSystem);
 
             //Act
             List<string> imports = importer.ExtractImports();
@@ -90,10 +104,14 @@ namespace TestNotFallExporterLib
 
         public ImportData CreateModel()
         {
-            ImportData model = new ImportData();
-            model.ErrorDirectory = @"c:\NotfallImporter\Error";
-            model.BackupDirectory = @"c:\NotfallImporter\Backup";
-            model.ImportDirectory = @"c:\NotfallImporter\Import";
+            ImportData model = new ImportData()
+            {
+                ErrorDirectory = @"c:\NotfallImporter\Error",
+                BackupDirectory = @"c:\NotfallImporter\Backup",
+                ImportDirectory = @"c:\NotfallImporter\Import",
+                AccountConfig = @"c:\NotfallImporter\AccountConfig.xml",
+                IdxIndexSpecification = @"c:\NotfallImporter\IdxIndexSpezifikation.xml"
+            };
             return model;
         }
                 

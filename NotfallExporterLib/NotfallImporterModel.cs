@@ -10,7 +10,8 @@ namespace NotfallExporterLib
     public class NotfallImporterModel
     {
         protected IFileSystem _fileSystem;
+        protected IdxBuilder _idxBuilder;
         public ImportData Data { get; set; }
-        protected static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

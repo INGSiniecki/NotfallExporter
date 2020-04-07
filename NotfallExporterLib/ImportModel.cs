@@ -9,7 +9,7 @@ namespace NotfallExporterLib
 {
     public class ImportModel
     {
-        protected static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         protected string _filePath;
         protected Idx _idx;

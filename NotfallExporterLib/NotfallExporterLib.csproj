@@ -71,7 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileSystemAbstraction.cs" />
     <Compile Include="Idx.cs" />
     <Compile Include="IdxBuilder.cs" />
     <Compile Include="IdxBuilderModel.cs" />

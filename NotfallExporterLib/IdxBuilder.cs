@@ -13,67 +13,72 @@ namespace NotfallExporterLib
     /*
      * creates and initializes IdxFiles
      */
-    public class IdxBuilder : IdxBuilderModel, IIdxBuilder, FileSystemAbstraction
+    public class IdxBuilder : IdxBuilderModel, IIdxBuilder
     {
 
-        public IdxBuilder(string destPath)
+        public IdxBuilder(string destPath, IFileSystem fileSystem)
         {
-            _fileSystem = new FileSystem();
+
+            if (fileSystem == null)
+                _fileSystem = new FileSystem();
+            else
+                _fileSystem = fileSystem;
+
 
             _destPath = destPath;
         }
 
 
-        public Idx CreateIdx(string importFilePath)
+        public Idx CreateIdx(string importedFilePath)
         {
             if (!_fileSystem.Directory.Exists(_destPath))
                 throw new DirectoryNotFoundException();
 
-            string idxInput = FillIdx(importFilePath);
+            string idxInput = FillIdx(importedFilePath);
 
             //creates the file
-            string dest_file = Path.Combine(_destPath, importFilePath.GetFileName().RemoveFileExtension() + ".idx");
+            string destFile = Path.Combine(_destPath, importedFilePath.GetFileName().RemoveFileExtension() + ".idx");
 
             //write infos in the file
-            _fileSystem.File.WriteAllText(dest_file, idxInput);
-            log.Info(String.Format("Creating: {0}", dest_file));
+            _fileSystem.File.WriteAllText(destFile, idxInput);
+            Log.Info(String.Format("Creating: {0}", destFile));
 
-            return new Idx(dest_file);
+            return new Idx(destFile);
         }
 
-        private string FillIdx(string importFilePath)
+        private string FillIdx(string importedFilePath)
         {
 
             StringBuilder idxLines = new StringBuilder();
 
             XmlNode indexRoot = IdxIndexSpecification.ChildNodes[2];
 
-            XmlNode account = GetAccountNode(importFilePath);
+            XmlNode account = GetAccountNode(importedFilePath);
 
-            using (ZipArchive archive = new ZipArchive(_fileSystem.File.OpenRead(importFilePath), ZipArchiveMode.Read))
+            using (ZipArchive archive = new ZipArchive(_fileSystem.File.OpenRead(importedFilePath), ZipArchiveMode.Read))
             {
                 //iterating through all entries in the zip file
                 foreach(ZipArchiveEntry entry in archive.Entries)
                 {
-                    idxLines.AppendLine(CreateIdxLine(entry.Name, indexRoot, account, importFilePath));
+                    idxLines.AppendLine(CreateIdxLine(entry.Name, indexRoot, account, importedFilePath));
                 }
             }
             return idxLines.ToString();
         }
 
-        private XmlNode GetAccountNode(string importFilePath)
+        private XmlNode GetAccountNode(string importedFilePath)
         {
             XmlNode routing = AccountConfig.ChildNodes[2];
 
             foreach(XmlNode account in routing)
             {
-                if (account.FirstChild.InnerText.Equals(importFilePath.ExtractMSN()))
+                if (account.FirstChild.InnerText.Equals(importedFilePath.ExtractMSN()))
                     return account;
             }
             return null;
         }
 
-        private string CreateIdxLine(string entryname, XmlNode indexRoot, XmlNode account, string importFilePath)
+        private string CreateIdxLine(string entryname, XmlNode indexRoot, XmlNode account, string importedFilePath)
         {
             StringBuilder line = new StringBuilder();
             foreach(XmlNode index in indexRoot.ChildNodes)
@@ -94,8 +99,8 @@ namespace NotfallExporterLib
                     line.Append("1");
 
                 //VermittlerNr only in uploads
-                if (index.InnerText.Equals("VermittlerNr") && importFilePath.Split('_')[0].Equals("vmi"))
-                    importFilePath.GetVermittlerNr();
+                if (index.InnerText.Equals("VermittlerNr") && importedFilePath.Split('_')[0].Equals("vmi"))
+                    importedFilePath.GetVermittlerNr();
 
 
                 if (index.InnerText.Equals("PaginierNr"))
@@ -109,9 +114,5 @@ namespace NotfallExporterLib
             return line.ToString().Substring(0, line.Length - 1);
         }
 
-        public void SetFileSystem(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
     }
 }

@@ -13,13 +13,16 @@ namespace NotfallExporterLib
     /*
      * represents the Import of one File
      */
-    public class Import : ImportModel, IImport, FileSystemAbstraction
+    public class Import : ImportModel, IImport
     {
-        public Import(string dest_directory, string file)
+        public Import(string destDirectory, string file, IFileSystem fileSystem)
         {
-            _fileSystem = new FileSystem();
+            if (fileSystem == null)
+                _fileSystem = new FileSystem();
+            else
+                _fileSystem = fileSystem;
 
-            _destDirectory = dest_directory;
+            _destDirectory = destDirectory;
             _filePath = file;
         }
 
@@ -37,7 +40,7 @@ namespace NotfallExporterLib
                 _fileSystem.File.Copy(_filePath, Path.Combine(_destDirectory, _filePath.GetFileName()));
                 importedFilePath = Path.Combine(_destDirectory, _filePath.GetFileName());
             }
-            log.Info($"File: {_filePath.GetFileName()} imported to Import-Directory");
+            Log.Info($"File: {_filePath.GetFileName()} imported to Import-Directory");
 
             //creating an IdxFile
             _idx = idxBuilder.CreateIdx(importedFilePath);
@@ -50,11 +53,11 @@ namespace NotfallExporterLib
             if (_fileSystem.File.Exists(Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension() + ".zip")) && _fileSystem.File.Exists(_idx.File))
             {
                 _fileSystem.File.Create(Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension() + ".rdy"));
-                log.Info($"Rdy File created: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
+                Log.Info($"Rdy File created: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
             }
             else
             {
-                log.Error($"Could not create Rdy File: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
+                Log.Error($"Could not create Rdy File: {Path.Combine(_destDirectory, _filePath.GetFileName().RemoveFileExtension())}.rdy");
             }
 
         }
@@ -67,7 +70,7 @@ namespace NotfallExporterLib
            
 
             if (_fileSystem.File.Exists(zipFilePath))
-                log.Warn($"File: {zipFilePath.GetFileName()} already exists in Import-Directory");
+                Log.Warn($"File: {zipFilePath.GetFileName()} already exists in Import-Directory");
             else
                 using (ZipArchive archive = new ZipArchive(_fileSystem.File.Create(zipFilePath), ZipArchiveMode.Create))
                 {
@@ -80,14 +83,11 @@ namespace NotfallExporterLib
                             originalFileMemoryStream.CopyTo(zipElementStream);
                         }
                     }
-                    log.Info($"File: {_filePath.GetFileName()} zipped");
+                    Log.Info($"File: {_filePath.GetFileName()} zipped");
                 }
             return zipFilePath;
         }
 
-        public void SetFileSystem(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
+
     }
 }

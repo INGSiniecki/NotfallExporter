@@ -13,14 +13,25 @@ namespace NotfallExporterLib
     /*
      * manages the NotfallImport
      */
-    public class NotfallImporter : NotfallImporterModel, INotfallImporter, FileSystemAbstraction
+    public class NotfallImporter : NotfallImporterModel, INotfallImporter
     {
         
-        public NotfallImporter(ImportData model)
+        public NotfallImporter(ImportData model, IFileSystem fileSystem = null)
         {
-            _fileSystem = new FileSystem();
+            if (fileSystem == null)
+                _fileSystem = new FileSystem();
+            else
+                _fileSystem = fileSystem;
+
             Data = model;
 
+            _idxBuilder = new IdxBuilder(Data.ImportDirectory, _fileSystem);
+
+            _idxBuilder.AccountConfig = new XmlDocument();
+            _idxBuilder.AccountConfig.Load(_fileSystem.File.OpenRead(Data.AccountConfig));
+
+            _idxBuilder.IdxIndexSpecification = new XmlDocument();
+            _idxBuilder.IdxIndexSpecification.Load(_fileSystem.File.OpenRead(Data.IdxIndexSpecification));
 
         }
 
@@ -42,21 +53,14 @@ namespace NotfallExporterLib
         {
             CheckData();
 
-            log.Info($"Import has been started:\nError-Directory: {Data.ErrorDirectory}\nImport-Directory: {Data.ImportDirectory}\nBackup-Directory: {Data.BackupDirectory}");
+            Log.Info($"Import has been started:\nError-Directory: {Data.ErrorDirectory}\nImport-Directory: {Data.ImportDirectory}\nBackup-Directory: {Data.BackupDirectory}");
 
-            IdxBuilder idxBuilder = new IdxBuilder(Data.ImportDirectory);
-            idxBuilder.SetFileSystem(_fileSystem);
-
-            idxBuilder.AccountConfig = new XmlDocument();
-            idxBuilder.AccountConfig.Load(_fileSystem.File.OpenRead(Data.AccountConfig));
-
-            idxBuilder.IdxIndexSpecification = new XmlDocument();
-            idxBuilder.IdxIndexSpecification.Load(_fileSystem.File.OpenRead(Data.IdxIndexSpecification));
+           
 
             foreach (string importFile in ExtractImports())
             {
-                Import import = new Import(Data.ImportDirectory, importFile);
-                import.Start(idxBuilder);
+                Import import = new Import(Data.ImportDirectory, importFile, _fileSystem);
+                import.Start(_idxBuilder);
                 import.CreateRdy();
                 Backup(importFile);
             }
@@ -77,7 +81,7 @@ namespace NotfallExporterLib
                     importFiles.Add(files[i]);
             }
 
-            log.Info($"{importFiles.ToArray().Length} Import Files found");
+            Log.Info($"{importFiles.ToArray().Length} Import Files found");
 
             return importFiles;
         }
@@ -86,7 +90,7 @@ namespace NotfallExporterLib
         public void Backup(string file)
         {
             DateTime currentDate = DateTime.Today;
-            string backupDirectoryPath = Path.Combine(Data.BackupDirectory,"Backup",currentDate.ToString("dd_MM_yy"));
+            string backupDirectoryPath = Path.Combine(Data.BackupDirectory,"Backup"+currentDate.ToString("dd_MM_yy"));
 
             //creates a daily-directory in case it doesn't exist.
             if (!_fileSystem.Directory.Exists(backupDirectoryPath))
@@ -95,17 +99,13 @@ namespace NotfallExporterLib
             string backupFilePath = Path.Combine(backupDirectoryPath, file.GetFileName());
 
             if (_fileSystem.File.Exists(backupFilePath))
-                log.Warn($"File: {backupFilePath.GetFileName()} already exists in Backup-Directory" );
+                Log.Warn($"File: {backupFilePath.GetFileName()} already exists in Backup-Directory" );
             else
             {
                 _fileSystem.File.Move(file, backupFilePath);
-                log.Info($"File: {backupFilePath.GetFileName()} moved to Backup-Directory");
+                Log.Info($"File: {backupFilePath.GetFileName()} moved to Backup-Directory");
             }
         }
 
-        public void SetFileSystem(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
     }
 }

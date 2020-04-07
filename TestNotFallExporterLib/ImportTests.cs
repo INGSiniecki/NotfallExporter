@@ -12,10 +12,9 @@ namespace TestNotFallExporterLib
         public void TestStartForZip()
         {
             //Arrange
-            Import import = new Import(@"c:\NotfallImporter\Import",  @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.SetFileSystem(_fileSystem);
-            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
-
+            Import import = new Import(@"c:\NotfallImporter\Import",  @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", _fileSystem);
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error", _fileSystem); 
+            IdxBuilderTests.InitializeXml(idxBuilder);
 
             //Act
             import.Start(idxBuilder);
@@ -28,10 +27,11 @@ namespace TestNotFallExporterLib
         public void TestStartForEml()
         {
             //Arrange
-            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
-            import.SetFileSystem(_fileSystem);
+            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml", _fileSystem);
 
-            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error", _fileSystem);
+            IdxBuilderTests.InitializeXml(idxBuilder);
+
             //Act
             import.Start(idxBuilder);
             //Assert
@@ -43,8 +43,7 @@ namespace TestNotFallExporterLib
         public void TestCreateRdyForFilesNotExisting()
         {
             //Arrange
-            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.SetFileSystem(_fileSystem);
+            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", _fileSystem);
             //Act
             import.CreateRdy();
 
@@ -57,10 +56,11 @@ namespace TestNotFallExporterLib
         public void TestCreateRdyForFilesExisting()
         {
             //Arrange
-            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
-            import.SetFileSystem(_fileSystem);
+            Import import = new Import(@"c:\NotfallImporter\Import", @"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", _fileSystem);
 
-            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error");
+            IdxBuilder idxBuilder = new IdxBuilder(@"c:\NotfallImporter\Error", _fileSystem);
+            IdxBuilderTests.InitializeXml(idxBuilder);
+
 
             import.Start(idxBuilder);
             //Act
