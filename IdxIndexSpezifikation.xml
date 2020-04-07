@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--Bla bla.-->
+<Index>
+    <I1>BCount</I1>
+    <I2>VorgangsartID</I2>
+    <I3>VorgangsartName</I3>
+    <I4>ProduktName</I4>
+    <I5>Postkorb</I5>
+    <I6>PaginierNr</I6>
+    <I7>DokumentartID</I7>
+    <I8>MethodenID</I8>
+    <I9>KundenNr</I9>
+    <I10>KontoNr</I10>
+    <I11>AbschlussDatum</I11>
+    <I12>BaufiVorgangsNr</I12>
+    <I13>Versandart</I13>
+    <I14>Name der ImageDatei</I14>
+    <I15>Igz</I15>
+    <I16>Gz</I16>
+    <I17>Original</I17>
+    <I18>KreditkartenNr</I18>
+    <I19>ParnerNr</I19>
+    <I20>VermittlerNr</I20>
+    <I21>DMSDocClassId</I21>
+    <I22>Externe Nummer</I22>
+    <I23>ZuliefererID</I23>
+    <I24>Berarbeitungsinfo</I24>
+    <I25>Prioritaet</I25>
+    <I26>Posteingangsdatum</I26>
+    <I27>Bearbeitungsprio</I27>
+    <I28>AS_DMSUEBERGABE_ID</I28>
+    <I29>MANDANT_ID</I29>
+</Index>

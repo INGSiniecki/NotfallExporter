@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Routing erfolgt i.d.R. anhand der DMS-Klasse; soll direkt in einen PK exportiert werden (Übersteuerung DMS-Klasse), muss der Name des entsprechenden Postkorbes angegeben werden.-->
+<Routing>
+	<Account>
+		<MSN>99700</MSN>
+		<Kanal>MobileUploadOpting</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1420</DMSDocClassId>
+		<VorgangsartID>3</VorgangsartID>
+		<VorgangsartName>Schriftverkehr</VorgangsartName>
+		<DokumentartID>4</DokumentartID>
+		<ProduktName>(leer)</ProduktName>
+		<PostkorbName>SC DM QS Opting</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99701</MSN>
+		<Kanal>OptingMail</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1420</DMSDocClassId>
+		<VorgangsartID>3</VorgangsartID>
+		<VorgangsartName>Schriftverkehr</VorgangsartName>
+		<DokumentartID>4</DokumentartID>
+		<ProduktName>(leer)</ProduktName>
+		<PostkorbName>SC DM QS Opting</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>100</Bearbeitungsprio>
+		<Prioritaet>1</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99702</MSN>
+		<Kanal>MobileUploadOpting</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>3532</DMSDocClassId>
+		<VorgangsartID>317</VorgangsartID>
+		<VorgangsartName>Dokumenten-Upload</VorgangsartName>
+		<DokumentartID>4</DokumentartID>
+		<ProduktName>(leer)</ProduktName>
+		<PostkorbName>SC DM QS Opting</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>100</Bearbeitungsprio>
+		<Prioritaet>1</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99703</MSN>
+		<Kanal>OptingMail</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>3532</DMSDocClassId>
+		<VorgangsartID>3</VorgangsartID>
+		<VorgangsartName></VorgangsartName>
+		<DokumentartID></DokumentartID>
+		<ProduktName></ProduktName>
+		<PostkorbName>SC DM QS Opting</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>100</Bearbeitungsprio>
+		<Prioritaet>1</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99800</MSN>
+		<Kanal>EMailBaufi</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99801</MSN>
+		<Kanal>EMailSC</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Opting</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99802</MSN>
+		<Kanal>EMailBaufi</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99803</MSN>
+		<Kanal>EMailEmmieDVI</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account> 
+		<MSN>99804</MSN>
+		<Kanal>EMailEmmieDVI</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account> 
+		<MSN>99805</MSN>
+		<Kanal>EMailEmmieDVI</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account> 
+		<MSN>99806</MSN>
+		<Kanal>EMailEmmieDVI</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account> 
+		<MSN>99807</MSN>
+		<Kanal>EMailEmmieDVI</Kanal>
+		<PaginiernummerPrefix>81.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-5</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>ocricr</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99997</MSN>
+		<Kanal>UploadBaufiVermittler</Kanal>
+		<PaginiernummerPrefix>85.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-7</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>vmi</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99998</MSN>
+		<Kanal>UploadBaufiVermittler</Kanal>
+		<PaginiernummerPrefix>85.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-7</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>vmi</IfwUser>
+	</Account>
+	<Account>
+		<MSN>99999</MSN>
+		<Kanal>UploadBaufiVermittler</Kanal>
+		<PaginiernummerPrefix>85.</PaginiernummerPrefix>
+		<DMSDocClassId>1808</DMSDocClassId>
+		<VorgangsartID>51</VorgangsartID>
+		<VorgangsartName>Immobilienfinanzierung</VorgangsartName>
+		<DokumentartID>22</DokumentartID>
+		<ProduktName>Direkt-Baufinanzierung</ProduktName>
+		<PostkorbName>SC DM QS Baufi</PostkorbName>
+		<Versandart>-7</Versandart>
+		<Bearbeitungsinfo>Notfallimport - Dieser Vorgang konnte nicht durch Kofax verarbeitet werden</Bearbeitungsinfo>
+		<Bearbeitungsprio>500</Bearbeitungsprio>
+		<Prioritaet>0</Prioritaet>
+		<IfwUser>vmi</IfwUser>
+	</Account>
+</Routing>
