@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NotfallExporterLib
+namespace Com.Ing.DiBa.NotfallExporterLib.Util
 {
     public static class StringExtension
     {

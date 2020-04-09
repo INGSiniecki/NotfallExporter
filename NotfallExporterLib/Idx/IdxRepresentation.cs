@@ -5,18 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 
-namespace NotfallExporterLib
+namespace Com.Ing.DiBa.NotfallExporterLib.Idx
 {
     /*
      * represents an IdxFile
      */
-    public class Idx
+    public class IdxRepresentation
     {
-        public string File { get; }
-
-        public Idx(string file)
-        {
-            File = file;
-        }
+        public string File { get; set; }
+        public IdxContent Content { get; set; }
     }
 }

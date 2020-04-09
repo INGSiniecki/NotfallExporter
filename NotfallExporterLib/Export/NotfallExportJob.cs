@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.IO;
 using System.Security.Permissions;
-using System.IO.Abstractions;
 
-namespace NotfallExporterLib
+
+namespace Com.Ing.DiBa.NotfallExporterLib.Export
 {
     /*
      * class for continous NotfallImport
      */
-    public class NotfallImportJob : NotfallImportJobModel, INotfallImportJob
+    public class NotfallExportJob :  INotfallExportJob
     {
+        protected DirectoryExporter _notfallImporter;
+        protected FileSystemWatcher _watcher;
 
-        public NotfallImportJob(NotfallImporter notfallImporter)
+        public NotfallExportJob(DirectoryExporter notfallImporter)
         {
             _notfallImporter = notfallImporter;
         }
@@ -28,7 +26,7 @@ namespace NotfallExporterLib
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallImporter.Data.ErrorDirectory;
+                _watcher.Path = _notfallImporter.ImportModel.ErrorDirectory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -53,10 +51,7 @@ namespace NotfallExporterLib
             _watcher = null;
         }
 
-         ~NotfallImportJob()
-        {
-            _watcher.Dispose();
-        }
+
 
         public void OnChanged(object source, FileSystemEventArgs e) =>
             _notfallImporter.Start();

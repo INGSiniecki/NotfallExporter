@@ -15,7 +15,6 @@ namespace NotfallExporterUI
         [STAThread]
         static void Main()
         {
-            log.Fatal("hallo");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

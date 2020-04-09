@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TestNotFallExporterLib
 {
-    class FakeFileSystem
+    class TestFileSystem
     {
 
         public static MockFileSystem CreateFileSystem()

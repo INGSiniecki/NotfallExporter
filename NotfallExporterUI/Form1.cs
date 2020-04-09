@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.Ing.DiBa.NotfallExporterLib;
+using Com.Ing.DiBa.NotfallExporterLib.Export;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,14 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NotfallExporterLib;
 
 namespace NotfallExporterUI
 {
     public partial class Form1 : Form
     {
 
-        NotfallImportJob importJob;
+        NotfallExportJob _importJob;
         public Form1()
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace NotfallExporterUI
 
         private void button_stopImport_Click(object sender, EventArgs e)
         {
-            importJob.StopJob();
+            _importJob.StopJob();
 
             button_startImport.Enabled = true;
             button_stopImport.Enabled = false;
@@ -50,18 +51,22 @@ namespace NotfallExporterUI
 
         private void button_startImport_Click(object sender, EventArgs e)
         {
-            ImportData model = new ImportData();
-            model.ErrorDirectory = textBoxError.Text;
-            model.ImportDirectory = textBoxImport.Text;
-            model.BackupDirectory = textBoxBackup.Text;
+            ExportModel model = new ExportModel()
+            {
+                ErrorDirectory = textBoxError.Text,
+                ImportDirectory = textBoxImport.Text,
+                BackupDirectory = textBoxBackup.Text,
+                IdxIndexSpecification = textBoxIndexSpezifikation.Text,
+                AccountConfig = textBoxAccountConfig.Text
+            };
 
             model.IdxIndexSpecification = textBoxIndexSpezifikation.Text;
             model.AccountConfig = textBoxAccountConfig.Text;
 
-            NotfallImporter importer = new NotfallImporter(model);
+            DirectoryExporter importer = new DirectoryExporter(model);
 
-            importJob = new NotfallImportJob(importer);
-            importJob.StartJob();
+            _importJob = new NotfallExportJob(importer);
+            _importJob.StartJob();
 
 
            
