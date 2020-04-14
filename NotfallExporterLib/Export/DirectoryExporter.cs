@@ -1,20 +1,18 @@
 ﻿
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
-using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Export
 {
 
-    /*
-     * manages the NotfallImport
-     */
+    /// <summary>
+    /// Class to Export a Directory.
+    /// </summary>
     public class DirectoryExporter :  IDirectoryExporter
     {
-        protected IdxBuilder _idxBuilder;
         public ExportModel ImportModel { get;}
-        private IFileHandler _fileHandler;
+
+        private readonly IFileHandler _fileHandler;
 
         public DirectoryExporter(ExportModel model)
         {
@@ -30,8 +28,6 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
 
 
 
-
-        //starts the import 
         public void Start()
         {
             _fileHandler.checkModel(ImportModel);

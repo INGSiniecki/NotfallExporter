@@ -1,17 +1,15 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib.File;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Xml
 {
+    /// <summary>
+    /// Class to interact with Xml-Configs
+    /// </summary>
     public class XmlConfig
     {
         protected XmlDocument _xmlFile;
-        private IFileHandler _fileHandler;
+        private readonly IFileHandler _fileHandler;
 
         public XmlConfig(string xmlFile, IFileHandler fileHandler)
         {

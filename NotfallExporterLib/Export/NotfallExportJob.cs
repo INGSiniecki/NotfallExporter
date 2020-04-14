@@ -5,13 +5,14 @@ using System.Security.Permissions;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Export
 {
-    /*
-     * class for continous NotfallImport
-     */
+
+    /// <summary>
+    /// Class to continously Export Files from a Directory
+    /// </summary>
     public class NotfallExportJob :  INotfallExportJob
     {
-        protected DirectoryExporter _notfallImporter;
-        protected FileSystemWatcher _watcher;
+        private DirectoryExporter _notfallImporter;
+        private FileSystemWatcher _watcher;
 
         public NotfallExportJob(DirectoryExporter notfallImporter)
         {

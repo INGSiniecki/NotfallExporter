@@ -1,15 +1,20 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Idx
 {
+    /// <summary>
+    /// Class to represent the content of a Idx-File
+    /// </summary>
     public class IdxContent
     {
         public IList<string> Lines { get; set; }
 
+        /// <summary>
+        /// converts the IdxContent to String
+        /// </summary>
+        /// <returns>string</returns>
         override public string ToString()
         {
             StringBuilder content = new StringBuilder();

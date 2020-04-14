@@ -16,6 +16,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
     {
         public IFileSystem FileSys { get; set; }
 
+       
         public void BackupFile(string sourceFile, string backupDirectory)
         {
             DateTime currentDate = DateTime.Today;
@@ -34,6 +35,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 FileSys.File.Move(sourceFile, backupFilePath);
                 Log.Logger.Info($"File: {backupFilePath.GetFileName()} moved to Backup-Directory");
             }
+
         }
 
         public FileHandler()
@@ -41,7 +43,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             FileSys = new FileSystem();
         }
 
-
+        
         public void checkModel(ExportModel model)
         {
 
@@ -61,6 +63,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 throw new FileNotFoundException($"{model.IdxIndexSpecification} konnte nicht gefunden werden");
         }
 
+       
         public void CreateReadyFile(string sourceFile)
         {
 
@@ -75,7 +78,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 Log.Logger.Error($"Could not create Rdy File for File: {sourceFile}");
             }
         }
-
+        
         public string[] GetImportFiles(string directoryPath)
         {
             List<string> files = FileSys.Directory.GetFiles(directoryPath, "*.eml").ToList();
@@ -87,16 +90,16 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             return files.ToArray();
         }
 
+
         public ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(string zipFile)
         {
             using (ZipArchive archive = new ZipArchive(FileSys.File.OpenRead(zipFile), ZipArchiveMode.Read)) 
             return archive.Entries;
         }
 
-
-        public void ZipEmailFileTo(string sourceFile, string destPath)
+        public void ZipEmailFileTo(string sourceFile, string destDirectory)
         {
-            string zipFilePath = Path.Combine(destPath, sourceFile.GetFileName().RemoveFileExtension() + ".zip");
+            string zipFilePath = Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".zip");
 
 
 
