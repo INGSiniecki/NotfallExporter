@@ -71,22 +71,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Idx.cs" />
-    <Compile Include="IdxBuilder.cs" />
-    <Compile Include="IdxBuilderModel.cs" />
-    <Compile Include="IIdxBuilder.cs" />
-    <Compile Include="IImport.cs" />
-    <Compile Include="Import.cs" />
-    <Compile Include="ImportModel.cs" />
-    <Compile Include="ImportData.cs" />
-    <Compile Include="INotfallImporter.cs" />
-    <Compile Include="INotfallImportJob.cs" />
-    <Compile Include="NotfallImporter.cs" />
-    <Compile Include="NotfallImportJob.cs" />
-    <Compile Include="NotfallImporterModel.cs" />
-    <Compile Include="NotfallImportJobModel.cs" />
+    <Compile Include="File\FileHandler.cs" />
+    <Compile Include="File\IFileHandler.cs" />
+    <Compile Include="Idx\IdxRepresentation.cs" />
+    <Compile Include="Idx\IdxBuilder.cs" />
+    <Compile Include="Idx\IdxContent.cs" />
+    <Compile Include="Idx\IIdxBuilder.cs" />
+    <Compile Include="Export\IFileExport.cs" />
+    <Compile Include="Export\FileExporter.cs" />
+    <Compile Include="Export\ExportModel.cs" />
+    <Compile Include="Export\IDirectoryExporter.cs" />
+    <Compile Include="Export\INotfallExportJob.cs" />
+    <Compile Include="Util\Log.cs" />
+    <Compile Include="Export\DirectoryExporter.cs" />
+    <Compile Include="Export\NotfallExportJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringExtension.cs" />
+    <Compile Include="Util\StringExtension.cs" />
+    <Compile Include="Xml\IXmlAccountConfig.cs" />
+    <Compile Include="Xml\IXmlIdxIndexSpecification.cs" />
+    <Compile Include="Xml\XmlAccountConfig.cs" />
+    <Compile Include="Xml\XmlConfig.cs" />
+    <Compile Include="Xml\XmlIdxIndexSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config" />
