@@ -16,17 +16,28 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
     public class IdxBuilder : IIdxBuilder
     {
 
-        private IXmlIdxIndexSpecification _idxIndexSpecification;
-        private IXmlAccountConfig _accountConfig;
-        private IFileHandler _fileHandler;
+        private readonly IXmlIdxIndexSpecification _idxIndexSpecification;
+        private readonly IXmlAccountConfig _accountConfig;
+        private readonly IFileHandler _fileHandler;
 
+
+        /// <summary>
+        /// instantiate a object of IdxBuilder
+        /// </summary>
+        /// <param name="accountConfig">object to represent a AccountConfig.xml</param>
+        /// <param name="xmlIdxIndexSpecification">object to represent a IdxIndexSpecification.xml</param>
         public IdxBuilder(IXmlAccountConfig accountConfig, IXmlIdxIndexSpecification xmlIdxIndexSpecification)
         {
             _accountConfig = accountConfig;
             _idxIndexSpecification = xmlIdxIndexSpecification;
             _fileHandler = new FileHandler();
         }
-
+        /// <summary>
+        /// instantiates a object of idxBuilder
+        /// </summary>
+        /// <param name="accountConfig">object to represent a AccountConfig.xml</param>
+        /// <param name="xmlIdxIndexSpecification">object to represent a IdxIndexSpecification.xml</param>
+        /// <param name="fileHandler">object for FilesSystem operations</param>
         public IdxBuilder(IXmlAccountConfig accountConfig, IXmlIdxIndexSpecification xmlIdxIndexSpecification, IFileHandler fileHandler)
         {
             _accountConfig = accountConfig;
@@ -34,10 +45,15 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             _fileHandler = fileHandler;
         }
 
-       
+
+        /// <summary>
+        /// Creates a IdxFile from the given File
+        /// </summary>
+        /// <param name="sourceFile">file from which to create the Idx-File</param>
+        /// <param name="destDirectory">Destination-Directory</param>
+        /// <returns></returns>
         public IdxRepresentation BuildIdx(string sourceFile, string destDirectory)
         {
-
             IdxRepresentation idx = new IdxRepresentation {
                 File = Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".idx"),
                 Content = FillIdx(sourceFile)

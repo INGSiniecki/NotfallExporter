@@ -11,23 +11,34 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
     /// </summary>
     public class NotfallExportJob :  INotfallExportJob
     {
-        private DirectoryExporter _notfallImporter;
+        /// <summary>
+        /// object to export a directory
+        /// </summary>
+        private readonly DirectoryExporter _notfallExporter;
         private FileSystemWatcher _watcher;
 
+        /// <summary>
+        /// instantiates a object of NotfallExportJob
+        /// </summary>
+        /// <param name="notfallImporter">object to export a directory</param>
         public NotfallExportJob(DirectoryExporter notfallImporter)
         {
-            _notfallImporter = notfallImporter;
+            _notfallExporter = notfallImporter;
         }
 
+
+        /// <summary>
+        /// starts the continous export
+        /// </summary>
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public void StartJob()
         {
 
-            _notfallImporter.Start();
+            _notfallExporter.Start();
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallImporter.ImportModel.ErrorDirectory;
+                _watcher.Path = _notfallExporter.ImportModel.ErrorDirectory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -45,7 +56,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
                 _watcher.EnableRaisingEvents = true;
 
         }
-
+        /// <summary>
+        /// stops the continous export
+        /// </summary>
         public void StopJob()
         {
             _watcher.Dispose();
@@ -55,7 +68,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
 
 
         public void OnChanged(object source, FileSystemEventArgs e) =>
-            _notfallImporter.Start();
+            _notfallExporter.Start();
 
 
 

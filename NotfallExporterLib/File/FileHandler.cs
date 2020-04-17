@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.Collections.ObjectModel;
 using System.IO.Compression;
 using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
-using Com.Ing.DiBa.NotfallExporterLib.Export;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
+    /// <summary>
+    /// Class for FileSystem-Operations
+    /// </summary>
     public class FileHandler : IFileHandler
     {
         public IFileSystem FileSys { get; set; }
 
-       
+
+        /// <summary>
+        /// Creates a Day-Backup-Directory when it is not yet existing and moves a file into it.
+        /// 
+        /// </summary>
+        /// <param name="sourceFile">file to backup</param>
+        /// <param name="backupDirectory">Backup-Directory</param>
         public void BackupFile(string sourceFile, string backupDirectory)
         {
             DateTime currentDate = DateTime.Today;
@@ -38,12 +44,19 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
 
         }
 
+        /// <summary>
+        /// instantiate a object of the FileHandler class
+        /// </summary>
         public FileHandler()
         {
             FileSys = new FileSystem();
         }
 
-        
+
+        /// <summary>
+        /// checks wether the paths of a ExportModel exist.
+        /// </summary>
+        /// <param name="model">contains Export-Path Infromation</param>
         public void checkModel(ExportModel model)
         {
 
@@ -63,7 +76,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 throw new FileNotFoundException($"{model.IdxIndexSpecification} konnte nicht gefunden werden");
         }
 
-       
+
+        /// <summary>
+        /// Creates a Ready file from a given file.
+        /// </summary>
+        /// <param name="sourceFile">file to ceate a Ready-File from</param>
         public void CreateReadyFile(string sourceFile)
         {
 
@@ -78,11 +95,19 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 Log.Logger.Error($"Could not create Rdy File for File: {sourceFile}");
             }
         }
-        
-        public string[] GetImportFiles(string directoryPath)
+
+        /// <summary>
+        /// returns .zip and .eml files in a given Directory.
+        /// </summary>
+        /// <param name="directoryPath">Directory to extract import files from</param>
+        /// <returns>Array of FileInfo representing all Import-Files</returns>
+        public IFileInfo[] GetImportFiles(string directoryPath)
         {
-            List<string> files = FileSys.Directory.GetFiles(directoryPath, "*.eml").ToList();
-            files.AddRange(FileSys.Directory.GetFiles(directoryPath, "*.zip").ToList());
+            IDirectoryInfo directory = FileSys.DirectoryInfo.FromDirectoryName(directoryPath);
+
+            List<IFileInfo> files = directory.GetFiles("*.eml", SearchOption.TopDirectoryOnly).ToList();
+
+            files.AddRange(directory.GetFiles("*.zip", SearchOption.TopDirectoryOnly).ToList());
 
 
             Log.Logger.Info($"{files.ToArray().Length} Import Files found");
@@ -90,16 +115,25 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             return files.ToArray();
         }
 
-
+        /// <summary>
+        /// returns all Entries of a zip File
+        /// </summary>
+        /// <param name="zipFile">Zip-File to get the entries from</param>
+        /// <returns>Collection of ZipEntries</returns>
         public ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(string zipFile)
         {
             using (ZipArchive archive = new ZipArchive(FileSys.File.OpenRead(zipFile), ZipArchiveMode.Read)) 
             return archive.Entries;
         }
 
-        public void ZipEmailFileTo(string sourceFile, string destDirectory)
+        /// <summary>
+        /// Converts a Email-File into a Zip-File and moves it to a Directory.
+        /// </summary>
+        /// <param name="sourceFile">Email-File to convert</param>
+        /// <param name="destDirectory">Destination-Directory</param>
+        public void ZipEmailFileTo(IFileInfo sourceFile, string destDirectory)
         {
-            string zipFilePath = Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".zip");
+            string zipFilePath = Path.Combine(destDirectory, Path.ChangeExtension(sourceFile.Name,".zip"));
 
 
 
@@ -108,17 +142,26 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             else
                 using (ZipArchive archive = new ZipArchive(FileSys.File.Create(zipFilePath), ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry zipElement = archive.CreateEntry(sourceFile.GetFileName());
+                    ZipArchiveEntry zipElement = archive.CreateEntry(sourceFile.Name);
 
-                    using (MemoryStream originalFileMemoryStream = new MemoryStream(FileSys.File.ReadAllBytes(sourceFile)))
+                    using (MemoryStream originalFileMemoryStream = new MemoryStream(FileSys.File.ReadAllBytes(sourceFile.FullName)))
                     {
                         using (Stream zipElementStream = zipElement.Open())
                         {
                             originalFileMemoryStream.CopyTo(zipElementStream);
                         }
                     }
-                    Log.Logger.Info($"File: {sourceFile.GetFileName()} zipped");
+                    Log.Logger.Info($"File: {sourceFile.Name} zipped");
                 }
+        }
+
+        public void exportFile(IFileInfo sourceFile, string destDirectory)
+        {
+            string destFilePath = Path.Combine(destDirectory, sourceFile.Name);
+            if (!FileSys.File.Exists(destFilePath))
+            {
+                FileSys.File.Copy(sourceFile.FullName, destFilePath);
+            }
         }
     }
 }

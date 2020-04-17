@@ -9,6 +9,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
     /// </summary>
     public class IdxContent
     {
+        /// <summary>
+        /// All lines of text in a idx
+        /// </summary>
         public IList<string> Lines { get; set; }
 
         /// <summary>

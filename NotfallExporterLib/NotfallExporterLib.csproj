@@ -71,6 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event\DirectoryExportEventArgs.cs" />
+    <Compile Include="Event\FileExportEventArgs.cs" />
+    <Compile Include="Event\WarnEventArgs.cs" />
     <Compile Include="File\FileHandler.cs" />
     <Compile Include="File\IFileHandler.cs" />
     <Compile Include="Idx\IdxRepresentation.cs" />
@@ -97,5 +100,6 @@
     <None Include="log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

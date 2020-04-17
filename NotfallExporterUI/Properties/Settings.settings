@@ -1,7 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NotfallExporterUI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ErrorDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">test</Value>
+    </Setting>
+    <Setting Name="ImportDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">test</Value>
+    </Setting>
+    <Setting Name="BackupDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">test</Value>
+    </Setting>
+    <Setting Name="AccountConfig" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">t</Value>
+    </Setting>
+    <Setting Name="IdxIndexSpecification" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">t</Value>
+    </Setting>
+    <Setting Name="Einstellung" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">t</Value>
+    </Setting>
+    <Setting Name="Einstellung1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">t</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

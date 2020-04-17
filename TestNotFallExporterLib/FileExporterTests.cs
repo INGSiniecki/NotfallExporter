@@ -1,10 +1,9 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib;
 using Com.Ing.DiBa.NotfallExporterLib.Export;
 using Com.Ing.DiBa.NotfallExporterLib.File;
-using Com.Ing.DiBa.NotfallExporterLib.Idx;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
 using System;
 using System.IO;
+using System.IO.Abstractions;
 using Xunit;
 
 namespace TestNotFallExporterLib
@@ -18,9 +17,10 @@ namespace TestNotFallExporterLib
         {
             //Arrange
             FileExporter import = new FileExporter(CreateModel(), _fileHandler);
+            IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
 
             //Act
-            import.Start(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
+            import.Start(file);
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
@@ -34,8 +34,10 @@ namespace TestNotFallExporterLib
             //Arrange
             FileExporter import = new FileExporter(CreateModel(), _fileHandler);
 
+            IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
+
             //Act
-            import.Start(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
+            import.Start(file);
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.zip"));
@@ -49,8 +51,9 @@ namespace TestNotFallExporterLib
             //Arrange
             FileExporter import = new FileExporter(CreateModel(), _fileHandler);
 
+            IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"C:\NotExisting.txt");
             //Act
-            Action a  = () => import.Start(@"C:\NotExisting.txt");
+            Action a  = () => import.Start(file);
 
             //Assert
             Assert.Throws<FileNotFoundException>(a);

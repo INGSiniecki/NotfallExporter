@@ -3,6 +3,7 @@ using Com.Ing.DiBa.NotfallExporterLib.File;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Text;
 using Xunit;
 
@@ -122,12 +123,13 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            string[] files = _fileHandler.GetImportFiles(_exportModel.ErrorDirectory);
+            IFileInfo[] files = _fileHandler.GetImportFiles(_exportModel.ErrorDirectory);
+
 
             //Assert
-            Assert.Contains(_testZipFile, files);
-            Assert.Contains(_testEmlFile, files);
-            Assert.DoesNotContain(@"c:\NotfallImporter\Error\TextFile.txt", files);
+            Assert.Contains(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile), files);
+            Assert.Contains(_fileHandler.FileSys.FileInfo.FromFileName(_testEmlFile), files);
+           Assert.DoesNotContain(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\TextFile.txt"), files);
 
         }
 
@@ -139,7 +141,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.ZipEmailFileTo(_testEmlFile, _exportModel.ImportDirectory);
+            _fileHandler.ZipEmailFileTo(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile), _exportModel.ImportDirectory);
 
             //Assert
             string zipFile = Path.Combine(_exportModel.ImportDirectory, Path.GetFileNameWithoutExtension(_testEmlFile) + ".zip");

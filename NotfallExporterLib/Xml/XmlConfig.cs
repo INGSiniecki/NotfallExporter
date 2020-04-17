@@ -11,6 +11,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Xml
         protected XmlDocument _xmlFile;
         private readonly IFileHandler _fileHandler;
 
+        /// <summary>
+        /// instantiates a object of XmlConfig
+        /// </summary>
+        /// <param name="xmlFile">path to the xml-File</param>
+        /// <param name="fileHandler">object for FileSystem operations</param>
         public XmlConfig(string xmlFile, IFileHandler fileHandler)
         {
             _fileHandler = fileHandler;
@@ -20,6 +25,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Xml
 
         }
 
+        /// <summary>
+        /// returns the Account Node which matches the given msn.
+        /// </summary>
+        /// <param name="msn"></param>
+        /// <returns></returns>
         protected XmlNode GetRootNode(string name)
         {
             foreach (XmlNode node in _xmlFile.ChildNodes)
