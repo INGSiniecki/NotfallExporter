@@ -3,6 +3,7 @@ using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
 using Com.Ing.DiBa.NotfallExporterLib.Xml;
+using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.IO;
 using System.IO.Abstractions;
 
@@ -20,7 +21,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         private readonly IFileHandler _fileHandler;  
         private IdxBuilder _idxBuilder;
 
-        public event ExportEventHandler FileExportEvent;
+        public event FileExportEventHandler FileExportEvent;
 
         /// <summary>
         /// instantiate a new object of the FileExporter-Class
@@ -39,13 +40,13 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         ///  instantiate a new object of the FileExporter-Class
         /// </summary>
         /// <param name="model">contains Path-Infromations for exporting</param>
-        public FileExporter(ExportModel model)
+        public FileExporter(ExportModel model) : this(model, new FileHandler())
         {
-            ExportModel = model;
-            InitializeIdxBuilder();
         }
 
-       
+
+
+
 
 
         /// <summary>
@@ -75,9 +76,17 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
 
             _fileHandler.BackupFile(sourceFile.FullName, ExportModel.BackupDirectory);
 
-            FileExportEvent(this, sourceFile.Name);
+            OnFileExportEvent(sourceFile);
 
         }
+
+        private void OnFileExportEvent(IFileInfo sourceFile)
+        {
+            FileExportEventHandler handler = FileExportEvent;
+
+            handler?.Invoke(this, new FileExportEventArgs(sourceFile));
+        }
+
 
         private void InitializeIdxBuilder()
         {

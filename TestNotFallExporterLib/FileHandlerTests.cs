@@ -1,10 +1,8 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib;
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.Text;
 using Xunit;
 
 namespace TestNotFallExporterLib
@@ -61,7 +59,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.checkModel(_exportModel);
+            _fileHandler.CheckModel(_exportModel);
         }
 
         [Fact]
@@ -81,7 +79,7 @@ namespace TestNotFallExporterLib
 
 
             //Act
-            Action a = () => _fileHandler.checkModel(new ExportModel() { BackupDirectory = @"c:\NotExisting" });
+            Action a = () => _fileHandler.CheckModel(new ExportModel() { BackupDirectory = @"c:\NotExisting" });
 
             Assert.Throws<DirectoryNotFoundException>(a);
         }

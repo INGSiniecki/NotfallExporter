@@ -1,19 +1,37 @@
 ﻿
 
 using System;
-using System.IO;
+using System.IO.Abstractions;
 
-namespace NotfallExporterLib.Event
+namespace Com.Ing.DiBa.NotfallExporterLib.Event
 {
-    class DirectoryExportEventArgs : EventArgs
+    /// <summary>
+    /// Class to contain Arguments for DirectoryExportEvents
+    /// </summary>
+    public class DirectoryExportEventArgs : EventArgs
     {
-        private DirectoryInfo _directory;
-        public DirectoryExportEventArgs(DirectoryInfo directory)
+        /// <summary>
+        /// directory which was exported
+        /// </summary>
+        public IDirectoryInfo Directory { get; set; }
+        /// <summary>
+        /// instantiates an object of DirectoryExportEventArgs
+        /// </summary>
+        /// <param name="directory">directory which as exported</param>
+        public DirectoryExportEventArgs(IDirectoryInfo directory)
         {
-            _directory = directory;
+            Directory = directory;
         }
 
+        /// <summary>
+        /// duration of the Directory-Export in milliseconds
+        /// </summary>
         public long durationMillis { get; set; }
+
+        /// <summary>
+        /// duration of 
+        /// </summary>
+        public long importedFileCount { get; set; } = 0;
 
     }
 }

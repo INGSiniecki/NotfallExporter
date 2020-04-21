@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Event\DirectoryExportEventArgs.cs" />
+    <Compile Include="Event\ErrorEventArgs.cs" />
+    <Compile Include="Event\EventHandler.cs" />
     <Compile Include="Event\FileExportEventArgs.cs" />
     <Compile Include="Event\WarnEventArgs.cs" />
     <Compile Include="File\FileHandler.cs" />
@@ -80,7 +82,7 @@
     <Compile Include="Idx\IdxBuilder.cs" />
     <Compile Include="Idx\IdxContent.cs" />
     <Compile Include="Idx\IIdxBuilder.cs" />
-    <Compile Include="Export\IFileExport.cs" />
+    <Compile Include="Export\IFileExporter.cs" />
     <Compile Include="Export\FileExporter.cs" />
     <Compile Include="Export\ExportModel.cs" />
     <Compile Include="Export\IDirectoryExporter.cs" />

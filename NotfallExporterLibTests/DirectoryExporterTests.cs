@@ -1,13 +1,10 @@
-using System;
+
 using Xunit;
-using System.IO.Abstractions.TestingHelpers;
-using System.Collections.Generic;
-using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib;
 using Com.Ing.DiBa.NotfallExporterLib.Export;
 using Com.Ing.DiBa.NotfallExporterLib.File;
 
-namespace TestNotFallExporterLib
+namespace Com.Ing.DiBa.NotfallExporterLibTests
 {
     public class DirectoryExporterTests
     {

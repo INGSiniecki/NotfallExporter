@@ -4,8 +4,11 @@ using System.Linq;
 using System.IO.Abstractions;
 using System.Collections.ObjectModel;
 using System.IO.Compression;
-using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
+using Com.Ing.DiBa.NotfallExporterLib.Event;
+using System.IO;
+using ErrorEventHandler = Com.Ing.DiBa.NotfallExporterLib.Event.ErrorEventHandler;
+using ErrorEventArgs = Com.Ing.DiBa.NotfallExporterLib.Event.ErrorEventArgs;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -16,6 +19,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
     {
         public IFileSystem FileSys { get; set; }
 
+        public event WarnEventHandler WarnEvent;
+        public event ErrorEventHandler ErrorEvent;
 
         /// <summary>
         /// Creates a Day-Backup-Directory when it is not yet existing and moves a file into it.
@@ -35,7 +40,12 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             string backupFilePath = Path.Combine(backupDirectoryPath, sourceFile.GetFileName());
 
             if (FileSys.File.Exists(backupFilePath))
-                Log.Logger.Warn($"File: {backupFilePath.GetFileName()} already exists in Backup-Directory");
+            {
+                string warnMessage = $"File: {backupFilePath.GetFileName()} already exists in Backup-Directory";
+                Log.Logger.Warn(warnMessage);
+                onWarnEvent(warnMessage);
+                FileSys.File.Move(sourceFile, Path.Combine(backupDirectoryPath, $"{sourceFile.GetFileName().RemoveFileExtension()} Copy.{sourceFile.GetFileExtension()}" ));
+            }
             else
             {
                 FileSys.File.Move(sourceFile, backupFilePath);
@@ -57,23 +67,31 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// checks wether the paths of a ExportModel exist.
         /// </summary>
         /// <param name="model">contains Export-Path Infromation</param>
-        public void checkModel(ExportModel model)
+        public bool CheckModel(ExportModel model)
         {
+            try
+            {
+                if (!FileSys.Directory.Exists(model.ErrorDirectory))
+                    throw new DirectoryNotFoundException($"{model.ErrorDirectory} was not found");
 
-            if (!FileSys.Directory.Exists(model.ErrorDirectory))
-                throw new DirectoryNotFoundException($"{model.ErrorDirectory} konnte nicht gefunden werden");
+                if (!FileSys.Directory.Exists(model.ImportDirectory))
+                    throw new DirectoryNotFoundException($"{model.ImportDirectory} was not found");
 
-            if (!FileSys.Directory.Exists(model.ImportDirectory))
-                throw new DirectoryNotFoundException($"{model.ImportDirectory} konnte nicht gefunden werden");
+                if (!FileSys.Directory.Exists(model.BackupDirectory))
+                    throw new DirectoryNotFoundException($"{model.BackupDirectory} was not found");
 
-            if (!FileSys.Directory.Exists(model.BackupDirectory))
-                throw new DirectoryNotFoundException($"{model.BackupDirectory} konnte nicht gefunden werden");
+                if (!FileSys.File.Exists(model.AccountConfig))
+                    throw new FileNotFoundException($"{model.AccountConfig} was not found");
 
-            if (!FileSys.File.Exists(model.AccountConfig))
-                throw new FileNotFoundException($"{model.AccountConfig} konnte nicht gefunden werden");
-
-            if (!FileSys.File.Exists(model.IdxIndexSpecification))
-                throw new FileNotFoundException($"{model.IdxIndexSpecification} konnte nicht gefunden werden");
+                if (!FileSys.File.Exists(model.IdxIndexSpecification))
+                    throw new FileNotFoundException($"{model.IdxIndexSpecification} was not found");
+            }catch(Exception exception)
+            {
+                
+                onErrorEvent(exception);
+                return false;
+            }
+            return true;
         }
 
 
@@ -83,16 +101,22 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// <param name="sourceFile">file to ceate a Ready-File from</param>
         public void CreateReadyFile(string sourceFile)
         {
+            string readyFile = Path.ChangeExtension(sourceFile, "rdy");
 
-            if (FileSys.File.Exists(sourceFile) && FileSys.File.Exists(Path.ChangeExtension(sourceFile, "idx")))
+            if (FileSys.File.Exists(readyFile))
             {
-                string readyFile = Path.ChangeExtension(sourceFile, "rdy");
+                onWarnEvent($"File: {readyFile.GetFileName()} already exists in Import-Directory");
+            }
+            else if (FileSys.File.Exists(sourceFile) && FileSys.File.Exists(Path.ChangeExtension(sourceFile, "idx")))
+            {
                 FileSys.File.Create(readyFile);
                 Log.Logger.Info($"Rdy File created: {readyFile}");
             }
             else
             {
-                Log.Logger.Error($"Could not create Rdy File for File: {sourceFile}");
+                string errorMessage = $"Could not create Rdy File for File: {sourceFile}";
+                Log.Logger.Error(errorMessage);
+                onErrorEvent(new Exception(errorMessage));
             }
         }
 
@@ -138,7 +162,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
 
 
             if (FileSys.File.Exists(zipFilePath))
-                Log.Logger.Warn($"File: {zipFilePath.GetFileName()} already exists in Import-Directory");
+            {
+                string warnMessage = $"File: {zipFilePath.GetFileName()} already exists in Import-Directory";
+                Log.Logger.Warn(warnMessage);
+                onWarnEvent(warnMessage);
+            }
             else
                 using (ZipArchive archive = new ZipArchive(FileSys.File.Create(zipFilePath), ZipArchiveMode.Create))
                 {
@@ -155,6 +183,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
                 }
         }
 
+        /// <summary>
+        /// moves a file to the given Directory
+        /// </summary>
+        /// <param name="sourceFile">File to move</param>
+        /// <param name="destDirectory">Directory to move the file in</param>
         public void exportFile(IFileInfo sourceFile, string destDirectory)
         {
             string destFilePath = Path.Combine(destDirectory, sourceFile.Name);
@@ -162,6 +195,24 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             {
                 FileSys.File.Copy(sourceFile.FullName, destFilePath);
             }
+            else
+            {
+                onWarnEvent($"{sourceFile.Name} already exists in Import-Directory");
+            }
+        }
+
+
+        private void onWarnEvent(string message)
+        {
+            WarnEventHandler handler = WarnEvent;
+            handler?.Invoke(this, new WarnEventArgs(message));
+        }
+
+
+        private void onErrorEvent(Exception e)
+        {
+            ErrorEventHandler handler = ErrorEvent;
+            handler?.Invoke(this, new ErrorEventArgs(e));
         }
     }
 }

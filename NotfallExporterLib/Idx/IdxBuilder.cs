@@ -1,9 +1,10 @@
 ﻿
+using Com.Ing.DiBa.NotfallExporterLib.Event;
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
 using Com.Ing.DiBa.NotfallExporterLib.Xml;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Xml;
@@ -19,6 +20,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         private readonly IXmlIdxIndexSpecification _idxIndexSpecification;
         private readonly IXmlAccountConfig _accountConfig;
         private readonly IFileHandler _fileHandler;
+
+        /// <summary>
+        /// Event which fires when an handable Exception occurs
+        /// </summary>
+        public event ErrorEventHandler ErrorEvent;
 
 
         /// <summary>
@@ -45,6 +51,19 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             _fileHandler = fileHandler;
         }
 
+        event Event.ErrorEventHandler IIdxBuilder.ErrorEvent
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
 
         /// <summary>
         /// Creates a IdxFile from the given File
@@ -55,7 +74,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         public IdxRepresentation BuildIdx(string sourceFile, string destDirectory)
         {
             IdxRepresentation idx = new IdxRepresentation {
-                File = Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".idx"),
+                File = System.IO.Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".idx"),
                 Content = FillIdx(sourceFile)
             };
 
@@ -74,14 +93,32 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
 
             XmlNode account = _accountConfig.GetAccountNode(sourceFile.ExtractMSN());
 
-          
-            //iterating through all entries in the zip file
-            foreach(ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(sourceFile))
+            if (indexRoot == null)
             {
-                content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, sourceFile));
+                onErrorEvent(new Exception("IdxIndexSpecification.xml corrupt!"));
+            }
+            else if (account == null)
+            {
+                onErrorEvent(new Exception("AccountConfig.xml corrupt!"));
+            }
+            else
+            {
+
+                //iterating through all entries in the zip file
+                foreach (ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(sourceFile))
+                {
+                    content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, sourceFile));
+                }
             }
             return content;
         }
+
+        private void onErrorEvent(Exception e)
+        {
+            ErrorEventHandler handler = ErrorEvent;
+            handler?.Invoke(this, new ErrorEventArgs(e));
+        }
+
 
 
         private string CreateIdxLine(string entryName, XmlNode indexRoot, XmlNode account, string sourceFile)

@@ -1,14 +1,26 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 
-namespace NotfallExporterLib.Event
+namespace Com.Ing.DiBa.NotfallExporterLib.Event
 {
-    class FileExportEventArgs : EventArgs
+    /// <summary>
+    /// Class to contain Arguments for FileExportEvents
+    /// </summary>
+    public class FileExportEventArgs : EventArgs
     {
-        private FileInfo _sourceFile;
-        public FileExportEventArgs(FileInfo directory)
+        /// <summary>
+        /// IFileInfo object to represent the exported File
+        /// </summary>
+        public IFileInfo SourceFile { get; set; }
+
+        /// <summary>
+        /// instantiates an object of FileExportEventArgs
+        /// </summary>
+        /// <param name="directory"></param>
+        public FileExportEventArgs(IFileInfo file)
         {
-            _sourceFile = directory;
+            SourceFile = file;
         }
 
         public long durationMillis { get; set; }

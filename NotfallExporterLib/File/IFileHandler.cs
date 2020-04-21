@@ -1,4 +1,5 @@
 ﻿
+using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
@@ -7,6 +8,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
     public interface IFileHandler
     {
+         event WarnEventHandler WarnEvent;
+         event ErrorEventHandler ErrorEvent;
+
         IFileSystem FileSys { get; set; }
 
        
@@ -26,7 +30,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         void BackupFile(string sourceFile, string backupDirectory);
 
       
-        void checkModel(ExportModel model);
+        bool CheckModel(ExportModel model);
 
         void exportFile(IFileInfo sourceFile, string destDirectory);
     }
