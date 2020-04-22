@@ -3,6 +3,7 @@ using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -33,5 +34,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         bool CheckModel(ExportModel model);
 
         void exportFile(IFileInfo sourceFile, string destDirectory);
+
+        XmlDocument LoadXml(string path);
     }
 }

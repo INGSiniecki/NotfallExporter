@@ -19,9 +19,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Xml
         public XmlConfig(string xmlFile, IFileHandler fileHandler)
         {
             _fileHandler = fileHandler;
-
-            _xmlFile = new XmlDocument();
-            _xmlFile.Load(_fileHandler.FileSys.File.OpenRead(xmlFile));
+            _xmlFile = _fileHandler.LoadXml(xmlFile);
 
         }
 

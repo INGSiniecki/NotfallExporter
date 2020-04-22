@@ -22,7 +22,5 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Event
         {
             SourceFile = file;
         }
-
-        public long durationMillis { get; set; }
     }
 }

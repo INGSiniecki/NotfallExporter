@@ -52,7 +52,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         /// <summary>
         /// starts the import of the file
         /// </summary>
-        /// <param name="idxBuilder">instance of IdxBuilder for building Idx-Files</param>
+        /// <param name="sourceFile">source-File</param>
         public void Start(IFileInfo sourceFile)
         {
 
@@ -65,7 +65,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
             }
             else
             {
-                _fileHandler.exportFile(sourceFile, Path.Combine(ExportModel.ImportDirectory));
+                _fileHandler.exportFile(sourceFile, ExportModel.ImportDirectory);
             }
             Log.Logger.Info($"File: {sourceFile.Name} imported to Import-Directory");
 

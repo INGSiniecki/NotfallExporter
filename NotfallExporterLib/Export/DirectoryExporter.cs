@@ -4,6 +4,7 @@ using Com.Ing.DiBa.NotfallExporterLib.Util;
 using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System;
 using System.IO.Abstractions;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Export
 {
@@ -38,6 +39,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
 
         private readonly IFileHandler _fileHandler;
 
+        private bool _errorThrown = false;
+
         /// <summary>
         /// instantiate a new object of te DirectoryExporter-Class
         /// </summary>
@@ -57,8 +60,17 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         {
             ImportModel = model;
             _fileHandler = fileHandler;
-            _fileHandler.ErrorEvent += (eventSender, args) => ErrorEvent?.Invoke(eventSender, args);
+            _fileHandler.ErrorEvent += (eventSender, args) => handleErrorEvent(eventSender, args);
             _fileHandler.WarnEvent += (eventSender, args) => WarnEvent(eventSender, args);
+        }
+
+        private void handleErrorEvent(object eventSender, ErrorEventArgs args)
+        {
+            if (args.Exception is XmlException)
+            {
+                _errorThrown = true;
+            }
+            ErrorEvent?.Invoke(eventSender, args);
         }
 
 
@@ -76,13 +88,26 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
 
                 fileExporter.FileExportEvent += (eventSender, args) => FileExportEvent(eventSender, args);
 
+                if (!_errorThrown)
+                {
+                    startExport(fileExporter);
+                }
+            }
+            
+        }
+
+        private void startExport(FileExporter fileExporter)
+        {
+            
                 long startTime = DateTime.Now.Millisecond;
                 int fileImportCount = 0;
+
                 foreach (IFileInfo importFile in _fileHandler.GetImportFiles(ImportModel.ErrorDirectory))
                 {
                     fileExporter.Start(importFile);
                     fileImportCount++;
                 }
+
 
                 if (fileImportCount == 0)
                 {
@@ -93,8 +118,6 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
                     OnExportDirectoryEvent(DateTime.Now.Millisecond - startTime, fileImportCount);
                 }
 
-            }
-            
         }
 
         private void OnExportDirectoryEvent(long deltaTime, int fileImportCount)

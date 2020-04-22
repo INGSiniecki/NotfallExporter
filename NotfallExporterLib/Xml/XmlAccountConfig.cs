@@ -28,11 +28,13 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Xml
         {
             XmlNode routing = GetRootNode("Routing");
 
-            //finding the right Account Node
-            foreach (XmlNode account in routing)
+            if (routing != null)
             {
-                if (account.FirstChild.InnerText.Equals(msn))
-                    return account;
+                foreach (XmlNode account in routing)
+                {
+                    if (account.FirstChild.InnerText.Equals(msn))
+                        return account;
+                }
             }
             return null;
         }

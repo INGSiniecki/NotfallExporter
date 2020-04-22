@@ -9,6 +9,7 @@ using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.IO;
 using ErrorEventHandler = Com.Ing.DiBa.NotfallExporterLib.Event.ErrorEventHandler;
 using ErrorEventArgs = Com.Ing.DiBa.NotfallExporterLib.Event.ErrorEventArgs;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -199,6 +200,24 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             {
                 onWarnEvent($"{sourceFile.Name} already exists in Import-Directory");
             }
+        }
+        /// <summary>
+        /// loads and Xml-File
+        /// </summary>
+        /// <param name="path">Path to the Xml-File</param>
+        /// <returns>XmlDocument object to represent the XMl-File</returns>
+        public XmlDocument LoadXml(string path)
+        {
+            XmlDocument xml = new XmlDocument();
+            try
+            {
+                xml.Load(path);
+            }
+            catch(XmlException e)
+            {
+                onErrorEvent(new XmlException($"{path.GetFileName()} is corrupt!"));
+            }
+            return xml;
         }
 
 

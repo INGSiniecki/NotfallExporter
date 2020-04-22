@@ -51,18 +51,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             _fileHandler = fileHandler;
         }
 
-        event Event.ErrorEventHandler IIdxBuilder.ErrorEvent
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
 
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
 
 
         /// <summary>
