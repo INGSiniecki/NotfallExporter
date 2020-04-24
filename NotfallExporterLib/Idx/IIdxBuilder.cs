@@ -1,12 +1,11 @@
 ﻿
 
-using Com.Ing.DiBa.NotfallExporterLib.Event;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Idx
 {
     interface IIdxBuilder
     {
-        event ErrorEventHandler ErrorEvent;
-        IdxRepresentation BuildIdx(string sourceFile, string destDirectory);
+        IdxRepresentation BuildIdx(ExportFile exportFile);
     }
 }

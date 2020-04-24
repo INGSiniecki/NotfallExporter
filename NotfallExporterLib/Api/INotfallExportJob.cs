@@ -2,7 +2,7 @@
 using System.IO;
 
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
     interface INotfallExportJob
     {

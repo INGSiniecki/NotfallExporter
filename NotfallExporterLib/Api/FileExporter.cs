@@ -2,12 +2,12 @@
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
 using Com.Ing.DiBa.NotfallExporterLib.Event;
-using System.IO;
 using System.IO.Abstractions;
+using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
 
 /// <summary>
@@ -44,40 +44,41 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         {
         }
 
-
-
-
-
-
         /// <summary>
         /// starts the import of the file
         /// </summary>
         /// <param name="sourceFile">source-File</param>
-        public void Start(IFileInfo sourceFile)
+        public void Start(ExportFile sourceFile)
         {
 
-            string importedFilePath = Path.Combine(ExportModel.ImportDirectory, Path.ChangeExtension(sourceFile.Name,"zip")); 
+            ExportFile exportedFile = new ExportFile(exportFile(sourceFile));
+            exportedFile.Data = sourceFile.Data;
 
+            _idxBuilder.BuildIdx(exportedFile);
+
+            _fileHandler.CreateReadyFile(exportedFile.File);
+
+            _fileHandler.BackupFile(sourceFile.File, ExportModel.BackupDirectory);
+
+            OnFileExportEvent(sourceFile.File);
+
+        }
+
+        private IFileInfo exportFile(ExportFile sourceFile)
+        {
+            IFileInfo exportedFile;
             //creates the Import File
-            if(sourceFile.Name.GetFileExtension().Equals("eml"))
+            if (sourceFile.Data.DoxisUser.Equals("eml"))
             {
-                _fileHandler.ZipEmailFileTo(sourceFile, ExportModel.ImportDirectory);
+               exportedFile = _fileHandler.ExportEmlFile(sourceFile.File, ExportModel.ImportDirectory);
             }
             else
             {
-                _fileHandler.exportFile(sourceFile, ExportModel.ImportDirectory);
+               exportedFile =  _fileHandler.ExportZipFile(sourceFile.File, ExportModel.ImportDirectory);
             }
-            Log.Logger.Info($"File: {sourceFile.Name} imported to Import-Directory");
+            Log.Logger.Info($"File: {sourceFile.File.Name} imported to Import-Directory");
 
-            //creating an IdxFile
-            _idxBuilder.BuildIdx(importedFilePath, ExportModel.ImportDirectory);
-
-            _fileHandler.CreateReadyFile(importedFilePath);
-
-            _fileHandler.BackupFile(sourceFile.FullName, ExportModel.BackupDirectory);
-
-            OnFileExportEvent(sourceFile);
-
+            return exportedFile;
         }
 
         private void OnFileExportEvent(IFileInfo sourceFile)

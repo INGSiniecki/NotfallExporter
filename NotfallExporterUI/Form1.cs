@@ -1,10 +1,9 @@
-﻿using Com.Ing.DiBa.NotfallExporterLib;
-using Com.Ing.DiBa.NotfallExporterLib.Export;
+﻿
 using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System;
-using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
+using Com.Ing.DiBa.NotfallExporterLib.Api;
 
 namespace NotfallExporterUI
 {

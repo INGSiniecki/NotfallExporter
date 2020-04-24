@@ -1,7 +1,7 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib.File;
 using System.Xml;
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Xml
+namespace Com.Ing.DiBa.NotfallExporterLib.File.Xml
 {
     /// <summary>
     /// class to represent the AccountConfig.xml

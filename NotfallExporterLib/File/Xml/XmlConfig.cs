@@ -1,7 +1,7 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib.File;
 using System.Xml;
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Xml
+namespace Com.Ing.DiBa.NotfallExporterLib.File.Xml
 {
     /// <summary>
     /// Class to interact with Xml-Configs
@@ -19,8 +19,22 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Xml
         public XmlConfig(string xmlFile, IFileHandler fileHandler)
         {
             _fileHandler = fileHandler;
-            _xmlFile = _fileHandler.LoadXml(xmlFile);
+            _xmlFile = LoadXml(xmlFile);
 
+        }
+
+        private XmlDocument LoadXml(string path)
+        {
+            XmlDocument xml = new XmlDocument();
+            try
+            {
+                xml.Load(path);
+            }
+            catch (XmlException e)
+            {
+
+            }
+            return xml;
         }
 
         /// <summary>

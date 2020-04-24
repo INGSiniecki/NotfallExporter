@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
     interface IDirectoryExporter
     {

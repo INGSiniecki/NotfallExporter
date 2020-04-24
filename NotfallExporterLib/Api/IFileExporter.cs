@@ -1,14 +1,14 @@
 ﻿
 
 using Com.Ing.DiBa.NotfallExporterLib.Event;
-using System.IO.Abstractions;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
     interface IFileExporter
     {
         event FileExportEventHandler FileExportEvent;
-        void Start(IFileInfo sourceFile);
+        void Start(ExportFile sourceFile);
 
 
     }

@@ -5,15 +5,16 @@ using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System;
 using System.IO.Abstractions;
 using System.Xml;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
-    
+
 
     /// <summary>
     /// Class to Export a Directory.
     /// </summary>
-    public class DirectoryExporter :  IDirectoryExporter
+    public class DirectoryExporter : IDirectoryExporter
     {
         /// <summary>
         /// object to handle FileExportEvents
@@ -35,7 +36,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         /// <summary>
         /// contains Path-Information for exporting
         /// </summary>
-        public ExportModel ImportModel { get;}
+        public ExportModel ImportModel { get; }
 
         private readonly IFileHandler _fileHandler;
 
@@ -93,30 +94,41 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
                     startExport(fileExporter);
                 }
             }
-            
+
         }
 
         private void startExport(FileExporter fileExporter)
         {
-            
-                long startTime = DateTime.Now.Millisecond;
-                int fileImportCount = 0;
 
-                foreach (IFileInfo importFile in _fileHandler.GetImportFiles(ImportModel.ErrorDirectory))
+            long startTime = DateTime.Now.Millisecond;
+            int fileImportCount = 0;
+
+            foreach (IFileInfo exportFileInfo in _fileHandler.GetImportFiles(ImportModel.ErrorDirectory))
+            {
+                ExportFile exportFile = new ExportFile(exportFileInfo);
+                exportFile.BuilData();
+
+                if (exportFile.Data != null)
                 {
-                    fileExporter.Start(importFile);
+                    fileExporter.Start(exportFile);
                     fileImportCount++;
-                }
-
-
-                if (fileImportCount == 0)
-                {
-                    OnWarnEvent("Directory empty!");
                 }
                 else
                 {
-                    OnExportDirectoryEvent(DateTime.Now.Millisecond - startTime, fileImportCount);
+                    //Fehler
                 }
+
+            }
+
+
+            if (fileImportCount == 0)
+            {
+                OnWarnEvent("Directory empty!");
+            }
+            else
+            {
+                OnExportDirectoryEvent(DateTime.Now.Millisecond - startTime, fileImportCount);
+            }
 
         }
 
@@ -124,7 +136,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
         {
             DirectoryExportEventHandler handler = DirectoryExportEvent;
 
-            DirectoryExportEventArgs args = new DirectoryExportEventArgs(_fileHandler.FileSys.DirectoryInfo.FromDirectoryName(ImportModel.ErrorDirectory)) 
+            DirectoryExportEventArgs args = new DirectoryExportEventArgs(_fileHandler.FileSys.DirectoryInfo.FromDirectoryName(ImportModel.ErrorDirectory))
             {
                 durationMillis = deltaTime,
                 importedFileCount = fileImportCount,
@@ -139,8 +151,5 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Export
             handler?.Invoke(this, new WarnEventArgs(message));
         }
 
-
-
-   
     }
 }

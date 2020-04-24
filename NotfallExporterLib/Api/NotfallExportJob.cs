@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Permissions;
 
 
-namespace Com.Ing.DiBa.NotfallExporterLib.Export
+namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
 
     /// <summary>

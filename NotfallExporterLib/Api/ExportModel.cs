@@ -1,4 +1,4 @@
-﻿namespace Com.Ing.DiBa.NotfallExporterLib
+﻿namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
     /*
      * contains all information for Notfallexporting
