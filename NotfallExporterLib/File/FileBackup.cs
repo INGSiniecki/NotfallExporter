@@ -6,7 +6,7 @@ using System.IO.Abstractions;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
-    public class FileBackup
+    public class FileBackup : IFileBackup
     {
         private readonly IDirectoryInfo _backupDirectory;
         private readonly IFileSystem _fileSystem;

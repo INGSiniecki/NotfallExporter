@@ -1,8 +1,5 @@
 ﻿using Com.Ing.DiBa.NotfallExporterLib.File;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
 using Xunit;
 
 namespace TestNotFallExporterLib

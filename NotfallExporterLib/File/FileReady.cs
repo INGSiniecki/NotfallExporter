@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
-    public class FileReady
+    public class FileReady : IFileReady
     {
         private readonly IFileSystem _fileSystem;
         private readonly IFileInfo _sourceFile;

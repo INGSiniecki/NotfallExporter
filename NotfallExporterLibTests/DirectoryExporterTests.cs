@@ -1,8 +1,8 @@
 
 using Xunit;
 using Com.Ing.DiBa.NotfallExporterLib;
-using Com.Ing.DiBa.NotfallExporterLib.Export;
 using Com.Ing.DiBa.NotfallExporterLib.File;
+using Com.Ing.DiBa.NotfallExporterLib.Api;
 
 namespace Com.Ing.DiBa.NotfallExporterLibTests
 {

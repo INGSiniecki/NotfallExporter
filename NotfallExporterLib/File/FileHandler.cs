@@ -36,7 +36,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             sourceFile.Refresh();
             if (backupDirectory.Exists && sourceFile.Exists)
             {
-                FileBackup backup = new FileBackup(backupDirectory, FileSys);
+                IFileBackup backup = new FileBackup(backupDirectory, FileSys);
                 backup.BackupFile(sourceFile);
             }
         }
@@ -80,7 +80,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             sourceFile.Refresh();
             if (sourceFile.Exists)
             {
-                FileReady readyFile = new FileReady(sourceFile, FileSys);
+                IFileReady readyFile = new FileReady(sourceFile, FileSys);
                 readyFile.Create();
             }
         }
@@ -130,7 +130,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         {
             IDirectoryInfo destDirectory = FileSys.DirectoryInfo.FromDirectoryName(destDirectoryPath);
 
-            FileZip zip = new FileZip(sourceFile, FileSys);
+            IFileZip zip = new FileZip(sourceFile, FileSys);
 
             if (destDirectory.Exists && sourceFile.Exists)
             {

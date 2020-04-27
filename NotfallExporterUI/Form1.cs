@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Com.Ing.DiBa.NotfallExporterLib.Api;
+using log4net;
 
 namespace NotfallExporterUI
 {
@@ -23,6 +24,8 @@ namespace NotfallExporterUI
             textBoxAccountConfig.Text = Properties.Settings.Default.AccountConfig;
             textBoxIndexSpezifikation.Text = Properties.Settings.Default.IdxIndexSpecification;
             textBoxError.Text = Properties.Settings.Default.ErrorDirectory;
+
+            log4net.Config.XmlConfigurator.Configure();
 
             _outPutManager = new OutPutManager(textBoxOutPut);
         }

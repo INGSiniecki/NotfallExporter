@@ -86,8 +86,11 @@
     <Compile Include="File\FileBackup.cs" />
     <Compile Include="File\FileHandler.cs" />
     <Compile Include="File\FileZip.cs" />
+    <Compile Include="File\IFileBackup.cs" />
     <Compile Include="File\IFileHandler.cs" />
     <Compile Include="File\FileReady.cs" />
+    <Compile Include="File\IFileReady.cs" />
+    <Compile Include="File\IFileZip.cs" />
     <Compile Include="Idx\IdxRepresentation.cs" />
     <Compile Include="Idx\IdxBuilder.cs" />
     <Compile Include="Idx\IdxContent.cs" />
@@ -109,7 +112,6 @@
     <Compile Include="File\Xml\XmlIdxIndexSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

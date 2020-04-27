@@ -2,8 +2,9 @@
 using Xunit;
 using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.File;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
 using System.IO;
+using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
 namespace Com.Ing.DiBa.NotfallExporterLibTests
 {
@@ -20,7 +21,7 @@ namespace Com.Ing.DiBa.NotfallExporterLibTests
 
             IdxBuilder idxBuilder = new IdxBuilder(accountConfig, indexSpecification, _fileHandler);
             //Act
-            IdxRepresentation idx = idxBuilder.BuildIdx(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", @"c:\NotfallImporter\Import");
+            IdxRepresentation idx = idxBuilder.BuildIdx(new ExportFile(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip")));
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.idx"));
@@ -37,7 +38,7 @@ namespace Com.Ing.DiBa.NotfallExporterLibTests
             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(@"c:\NotfallImporter\IdxIndexSpezifikation.xml", _fileHandler);
 
             IdxBuilder idxBuilder = new IdxBuilder(accountConfig, indexSpecification);
-            Action a = () => idxBuilder.BuildIdx(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", @"Not Existing");
+            Action a = () => idxBuilder.BuildIdx(new ExportFile(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip")));
 
             //Act and Assert
             Assert.Throws<DirectoryNotFoundException>(a);

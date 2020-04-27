@@ -7,7 +7,7 @@ using System.IO.Compression;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
-    public class FileZip
+    public class FileZip : IFileZip
     {
         private readonly IFileSystem _fileSystem;
         private readonly IFileInfo _sourceFile;
@@ -28,12 +28,12 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             }
             else
             {
-                 CreateZipArchive(zipFile);
+                 Create(zipFile);
             }
             return zipFile;
         }
 
-        private void CreateZipArchive(IFileInfo zipFile)
+        private void Create(IFileInfo zipFile)
         {
             using (ZipArchive archive = new ZipArchive(zipFile.Create(), ZipArchiveMode.Create))
             {
