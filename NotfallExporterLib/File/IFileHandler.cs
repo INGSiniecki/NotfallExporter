@@ -1,6 +1,5 @@
 ﻿
 using Com.Ing.DiBa.NotfallExporterLib.Api;
-using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
@@ -9,11 +8,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
     public interface IFileHandler
     {
-         event WarnEventHandler WarnEvent;
-         event ErrorEventHandler ErrorEvent;
+        IMessenger Messenger { get; set; }
 
         IFileSystem FileSys { get; set; }
-
        
         void CreateReadyFile(IFileInfo sourceFile);
 
@@ -23,14 +20,14 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         IFileInfo[] GetImportFiles(string directoryPath);
 
        
-        void BackupFile(IFileInfo sourceFile, string backupDirectory);
+        void BackupFile(IFileInfo sourceFile, string backupDirectoryPath);
 
       
         bool CheckModel(ExportModel model);
 
-        IFileInfo ExportEmlFile(IFileInfo sourceFile, string destDirectory);
+        IFileInfo ExportEmlFile(IFileInfo sourceFile, string destDirectoryPath);
 
-        IFileInfo ExportZipFile(IFileInfo sourceFile, string destDirectory);
+        IFileInfo ExportZipFile(IFileInfo sourceFile, string destDirectoryPath);
 
     }
 }

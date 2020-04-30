@@ -2,10 +2,10 @@
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
-using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System.IO.Abstractions;
 using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
 using Com.Ing.DiBa.NotfallExporterLib.File.Export;
+using System;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
@@ -17,11 +17,10 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
     {
 
         public ExportModel ExportModel { get; set; }
+        public IMessenger Messenger { get; set; }
 
         private readonly IFileHandler _fileHandler;  
         private IdxBuilder _idxBuilder;
-
-        public event FileExportEventHandler FileExportEvent;
 
         /// <summary>
         /// instantiate a new object of the FileExporter-Class
@@ -54,14 +53,19 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             ExportFile exportedFile = new ExportFile(exportFile(sourceFile));
             exportedFile.Data = sourceFile.Data;
 
-            _idxBuilder.BuildIdx(exportedFile);
+            try
+            {
+                _idxBuilder.BuildIdx(exportedFile);
 
-            _fileHandler.CreateReadyFile(exportedFile.File);
+                _fileHandler.CreateReadyFile(exportedFile.File);
 
-            _fileHandler.BackupFile(sourceFile.File, ExportModel.BackupDirectory);
+                _fileHandler.BackupFile(sourceFile.File, ExportModel.BackupDirectory);
 
-            OnFileExportEvent(sourceFile.File);
-
+                Messenger?.SendMessage($"{sourceFile.File.Name} exported!");
+            }catch(Exception e)
+            {
+                Messenger?.SendMessage($"Export of File {sourceFile.File.Name} failed!");
+            }
         }
 
         private IFileInfo exportFile(ExportFile sourceFile)
@@ -80,14 +84,6 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
 
             return exportedFile;
         }
-
-        private void OnFileExportEvent(IFileInfo sourceFile)
-        {
-            FileExportEventHandler handler = FileExportEvent;
-
-            handler?.Invoke(this, new FileExportEventArgs(sourceFile));
-        }
-
 
         private void InitializeIdxBuilder()
         {

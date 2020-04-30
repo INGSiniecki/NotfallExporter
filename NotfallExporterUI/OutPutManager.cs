@@ -1,5 +1,5 @@
 ﻿
-using Com.Ing.DiBa.NotfallExporterLib.Event;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -30,15 +30,6 @@ namespace NotfallExporterUI
             _richTextBox.Clear();
         }
 
-        /// <summary>
-        /// prints Directory-Export Events
-        /// </summary>
-        /// <param name="args"></param>
-        public void PrintDirectoryExport(DirectoryExportEventArgs args)
-        {
-            string output = $"Directory: {args.Directory.Name} exported!\nExport-Duration: {args.durationMillis}ms\nFiles exported: {args.importedFileCount}\n";
-            PrintText(output, Color.Blue);
-        }
 
         /// <summary>
         /// prints a colored Text
@@ -62,31 +53,18 @@ namespace NotfallExporterUI
             }
         }
 
-        /// <summary>
-        /// prints  File-Export-Events
-        /// </summary>
-        /// <param name="args"></param>
-        public void PrintFileExport(FileExportEventArgs args)
+        public void PrintMessage(string message)
         {
-            string output = $"{args.SourceFile.Name} exported!\n";
-            PrintText(output, Color.Green);
-        }
-        /// <summary>
-        /// Prints WarnEvents
-        /// </summary>
-        /// <param name="args"></param>
-        public void PrintWarn(WarnEventArgs args)
-        {
-            PrintText($"{args.WarnMessage}\n", Color.Orange);
+            PrintText($"{message}\n", Color.Black);
         }
 
         /// <summary>
         /// prints ErrorEvents
         /// </summary>
         /// <param name="args"></param>
-        public void PrintError(ErrorEventArgs args)
+        public void PrintError(Exception e)
         {
-            PrintText($"{args.Exception.Message}\n", Color.Red);
+            PrintText($"{e.Message}\n", Color.Red);
         }
     }
 }

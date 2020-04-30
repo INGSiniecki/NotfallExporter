@@ -1,5 +1,4 @@
 ﻿
-using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -65,13 +64,10 @@ namespace NotfallExporterUI
 
             ExportModel model = createExportModel();
 
-            DirectoryExporter importer = new DirectoryExporter(model);
+            DirectoryExporter exporter = new DirectoryExporter(model);
+            applyMessenging(exporter);
 
-            importer.FileExportEvent += (object eventSender, FileExportEventArgs args) => _outPutManager.PrintFileExport(args);
-            importer.WarnEvent += (object eventSender, WarnEventArgs args) => _outPutManager.PrintWarn(args);
-            importer.ErrorEvent += (object eventSender, ErrorEventArgs args) => _outPutManager.PrintError(args);
-
-            _importJob = new NotfallExportJob(importer);
+            _importJob = new NotfallExportJob(exporter);
             _importJob.StartJob();
 
             button_stopImport.Enabled = true;
@@ -173,14 +169,17 @@ namespace NotfallExporterUI
 
             ExportModel model = createExportModel();
 
-            DirectoryExporter importer = new DirectoryExporter(model);
+            DirectoryExporter exporter = new DirectoryExporter(model);
+            applyMessenging(exporter);
 
-            importer.DirectoryExportEvent += (object eventSender, DirectoryExportEventArgs args) => _outPutManager.PrintDirectoryExport(args);
-            importer.FileExportEvent += (object eventSender, FileExportEventArgs args) => _outPutManager.PrintFileExport(args);
-            importer.WarnEvent += (object eventSender, WarnEventArgs args) => _outPutManager.PrintWarn(args);
-            importer.ErrorEvent += (object eventSender, ErrorEventArgs args) => _outPutManager.PrintError(args);
+            exporter.Start();
+        }
 
-            importer.Start();
+        private void applyMessenging(DirectoryExporter exporter)
+        {
+            IMessenger messenger = new Messenger();
+            messenger.Message = _outPutManager.PrintMessage;
+            exporter.Messenger = messenger;
         }
     }
 }

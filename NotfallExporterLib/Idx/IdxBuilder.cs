@@ -60,8 +60,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         /// <returns></returns>
         public IdxRepresentation BuildIdx(ExportFile exportFile)
         {
-            IdxRepresentation idx = new IdxRepresentation {
-                File = Path.ChangeExtension(exportFile.File.FullName.RemoveFileExtension(),"idx"),
+            IdxRepresentation idx = new IdxRepresentation
+            {
+                File = Path.ChangeExtension(exportFile.File.FullName.RemoveFileExtension(), "idx"),
                 Content = FillIdx(exportFile)
             };
 
@@ -71,7 +72,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             return idx;
         }
 
-        private IdxContent FillIdx(ExportFile exportFile)
+        private IdxContent FillIdx(ExportFile exportFile) 
         {
             IdxContent content = new IdxContent();
             content.Lines = new List<string>();
@@ -81,21 +82,16 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             XmlNode account = _accountConfig.GetAccountNode(exportFile.Data.RoutingID);
 
             if (indexRoot == null)
-            {
-              //  onErrorEvent(new Exception("IdxIndexSpecification.xml corrupt!"));
-            }
-            else if (account == null)
-            {
-               // onErrorEvent(new Exception("AccountConfig.xml corrupt!"));
-            }
-            else
-            {
+                throw new XmlException($"IdxIndexSpecification invalid!");
 
-                //iterating through all entries in the zip file
-                foreach (ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(exportFile.File))
-                {
-                    content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, exportFile));
-                }
+            if(account == null)
+                throw new XmlException($"IdxIndexSpecification invalid!");
+
+
+            //iterating through all entries in the zip file
+            foreach (ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(exportFile.File))
+            {
+                content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, exportFile));
             }
             return content;
         }
@@ -103,16 +99,16 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         private string CreateIdxLine(string entryName, XmlNode indexRoot, XmlNode account, ExportFile exportFile)
         {
             StringBuilder line = new StringBuilder();
-            foreach(XmlNode index in indexRoot.ChildNodes)
+            foreach (XmlNode index in indexRoot.ChildNodes)
             {
-                foreach(XmlNode data in account.ChildNodes)
+                foreach (XmlNode data in account.ChildNodes)
                 {
                     //read data from AccountConfig
-                    if(index.InnerText.Equals(data.Name))
+                    if (index.InnerText.Equals(data.Name))
                         line.Append(data.InnerText);
 
 
-                    
+
                 }
 
                 //define dynamic data

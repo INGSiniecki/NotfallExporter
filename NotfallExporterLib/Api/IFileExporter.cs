@@ -1,13 +1,12 @@
 ﻿
 
-using Com.Ing.DiBa.NotfallExporterLib.Event;
 using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
     interface IFileExporter
     {
-        event FileExportEventHandler FileExportEvent;
+        IMessenger Messenger { get; set; }
         void Start(ExportFile sourceFile);
 
 

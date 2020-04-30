@@ -1,10 +1,8 @@
 ﻿
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
-using Com.Ing.DiBa.NotfallExporterLib.Event;
 using System;
 using System.IO.Abstractions;
-using System.Xml;
 using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Api
@@ -16,31 +14,14 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
     /// </summary>
     public class DirectoryExporter : IDirectoryExporter
     {
-        /// <summary>
-        /// object to handle FileExportEvents
-        /// </summary>
-        public event FileExportEventHandler FileExportEvent;
-        /// <summary>
-        /// object to handle DirectoyExportEvents
-        /// </summary>
-        public event DirectoryExportEventHandler DirectoryExportEvent;
-        /// <summary>
-        /// object to handle ErrorEvents
-        /// </summary>
-        public event ErrorEventHandler ErrorEvent;
-        /// <summary>
-        /// object to handle WarnEvents
-        /// </summary>
-        public event WarnEventHandler WarnEvent;
 
         /// <summary>
         /// contains Path-Information for exporting
         /// </summary>
         public ExportModel ImportModel { get; }
+        public IMessenger Messenger { get; set; }
 
         private readonly IFileHandler _fileHandler;
-
-        private bool _errorThrown = false;
 
         /// <summary>
         /// instantiate a new object of te DirectoryExporter-Class
@@ -61,18 +42,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         {
             ImportModel = model;
             _fileHandler = fileHandler;
-            _fileHandler.ErrorEvent += (eventSender, args) => handleErrorEvent(eventSender, args);
-            _fileHandler.WarnEvent += (eventSender, args) => WarnEvent(eventSender, args);
         }
 
-        private void handleErrorEvent(object eventSender, ErrorEventArgs args)
-        {
-            if (args.Exception is XmlException)
-            {
-                _errorThrown = true;
-            }
-            ErrorEvent?.Invoke(eventSender, args);
-        }
 
 
 
@@ -82,18 +53,13 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         public void Start()
         {
 
-            if (_fileHandler.CheckModel(ImportModel))
-            {
-                Log.Logger.Info($"Import has been started:\nError-Directory: {ImportModel.ErrorDirectory}\nImport-Directory: {ImportModel.ImportDirectory}\nBackup-Directory: {ImportModel.BackupDirectory}");
-                FileExporter fileExporter = new FileExporter(ImportModel, _fileHandler);
+            Log.Logger.Info($"Import has been started:\nError-Directory: {ImportModel.ErrorDirectory}\nImport-Directory: {ImportModel.ImportDirectory}\nBackup-Directory: {ImportModel.BackupDirectory}");
+            FileExporter fileExporter = new FileExporter(ImportModel, _fileHandler);
 
-                fileExporter.FileExportEvent += (eventSender, args) => FileExportEvent(eventSender, args);
+            fileExporter.Messenger = Messenger;
+            _fileHandler.Messenger = Messenger;
 
-                if (!_errorThrown)
-                {
-                    startExport(fileExporter);
-                }
-            }
+            startExport(fileExporter);
 
         }
 
@@ -115,40 +81,24 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
                 }
                 else
                 {
-                    //Fehler
+                    Messenger?.SendMessage($"{exportFile.File.Name} couldn't be exported!");
                 }
 
             }
-
-
-            if (fileImportCount == 0)
-            {
-                OnWarnEvent("Directory empty!");
-            }
-            else
-            {
-                OnExportDirectoryEvent(DateTime.Now.Millisecond - startTime, fileImportCount);
-            }
+            Inform(fileImportCount, DateTime.Now.Millisecond - startTime);
 
         }
 
-        private void OnExportDirectoryEvent(long deltaTime, int fileImportCount)
+        private void Inform(int fileImportCount, long deltaTime)
         {
-            DirectoryExportEventHandler handler = DirectoryExportEvent;
-
-            DirectoryExportEventArgs args = new DirectoryExportEventArgs(_fileHandler.FileSys.DirectoryInfo.FromDirectoryName(ImportModel.ErrorDirectory))
+            if(fileImportCount > 0)
             {
-                durationMillis = deltaTime,
-                importedFileCount = fileImportCount,
-            };
-
-            handler?.Invoke(this, args);
-        }
-
-        private void OnWarnEvent(string message)
-        {
-            WarnEventHandler handler = WarnEvent;
-            handler?.Invoke(this, new WarnEventArgs(message));
+                Messenger?.SendMessage($"{fileImportCount} files exported!");
+                Messenger?.SendMessage($"Duration: {deltaTime}ms");
+            } else
+            {
+                Messenger?.SendMessage($"Error-Directory empty!");
+            }
         }
 
     }

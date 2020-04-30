@@ -71,11 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Event\DirectoryExportEventArgs.cs" />
-    <Compile Include="Event\ErrorEventArgs.cs" />
-    <Compile Include="Event\EventHandler.cs" />
-    <Compile Include="Event\FileExportEventArgs.cs" />
-    <Compile Include="Event\WarnEventArgs.cs" />
+    <Compile Include="Api\IMessenger.cs" />
+    <Compile Include="Api\Messenger.cs" />
     <Compile Include="File\Export\ExportDataPattern.cs" />
     <Compile Include="File\Export\ExportFile.cs" />
     <Compile Include="File\Export\ExportFileData.cs" />
