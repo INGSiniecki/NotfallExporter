@@ -9,6 +9,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         IMessenger Messenger { get; set; }
         void Start(ExportFile sourceFile);
 
+        void InitializeIdxBuilder();
+
 
     }
 }

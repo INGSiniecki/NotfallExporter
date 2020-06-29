@@ -19,23 +19,10 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File.Xml
         public XmlConfig(string xmlFile, IFileHandler fileHandler)
         {
             _fileHandler = fileHandler;
-            _xmlFile = LoadXml(xmlFile);
+            _xmlFile = _fileHandler.LoadXmlFile(_fileHandler.FileSys.FileInfo.FromFileName(xmlFile));
 
         }
 
-        private XmlDocument LoadXml(string path)
-        {
-            XmlDocument xml = new XmlDocument();
-            try
-            {
-                xml.Load(path);
-            }
-            catch (XmlException e)
-            {
-
-            }
-            return xml;
-        }
 
         /// <summary>
         /// returns the Account Node which matches the given msn.

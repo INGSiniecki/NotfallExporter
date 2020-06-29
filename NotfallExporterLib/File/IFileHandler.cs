@@ -3,6 +3,7 @@ using Com.Ing.DiBa.NotfallExporterLib.Api;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -28,6 +29,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         IFileInfo ExportEmlFile(IFileInfo sourceFile, string destDirectoryPath);
 
         IFileInfo ExportZipFile(IFileInfo sourceFile, string destDirectoryPath);
+
+        XmlDocument LoadXmlFile(IFileInfo sourceFile);
+
 
     }
 }

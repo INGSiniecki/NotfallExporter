@@ -59,11 +59,18 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             fileExporter.Messenger = Messenger;
             _fileHandler.Messenger = Messenger;
 
-            startExport(fileExporter);
-
+            try
+            {
+                fileExporter.InitializeIdxBuilder();
+                StartExport(fileExporter);
+            } catch (Exception e)
+            {
+                Messenger.sendError(e);
+            }
         }
 
-        private void startExport(FileExporter fileExporter)
+
+        private void StartExport(FileExporter fileExporter)
         {
 
             long startTime = DateTime.Now.Millisecond;

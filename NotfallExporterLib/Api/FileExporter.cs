@@ -32,7 +32,6 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             _fileHandler = fileHandler;
 
             ExportModel = model;
-            InitializeIdxBuilder();
         }
 
         /// <summary>
@@ -85,13 +84,15 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             return exportedFile;
         }
 
-        private void InitializeIdxBuilder()
+        /// <summary>
+        /// initializes the IdxBuilder object of the FileExporter
+        /// </summary>
+        public void InitializeIdxBuilder()
         {
 
-            XmlAccountConfig accountConfig = new XmlAccountConfig(ExportModel.AccountConfig, _fileHandler);
-
-            XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(ExportModel.IdxIndexSpecification, _fileHandler);
-
+             XmlAccountConfig accountConfig = new XmlAccountConfig(ExportModel.AccountConfig, _fileHandler);
+             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(ExportModel.IdxIndexSpecification, _fileHandler);
+            
             _idxBuilder = new IdxBuilder(accountConfig, indexSpecification, _fileHandler);
         }
 

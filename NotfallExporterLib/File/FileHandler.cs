@@ -7,6 +7,7 @@ using System.IO.Compression;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
 using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib.Api;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -84,6 +85,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         {
             IDirectoryInfo directory = FileSys.DirectoryInfo.FromDirectoryName(directoryPath);
 
+            if (!directory.Exists)
+            {
+                throw new DirectoryNotFoundException($"Error-Directory: {directory.FullName} doesn't exist!");
+            }
+
             List<IFileInfo> files = directory.GetFiles("*.eml", SearchOption.TopDirectoryOnly).ToList();
 
             files.AddRange(directory.GetFiles("*.zip", SearchOption.TopDirectoryOnly).ToList());
@@ -136,15 +142,36 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             }
             else
             {
-                Messenger.SendMessage($"{zipFile.Name} already imported!");
+                Messenger.SendMessage($"{zipFile.Name} already exists!");
             }
             return zipFile;
         }
+
         /// <summary>
         /// loads and Xml-File
         /// </summary>
-        /// <param name="path">Path to the Xml-File</param>
-        /// <returns>XmlDocument object to represent the XMl-File</returns>
+        /// <param name="sourceFile">IFileInfo object to represent the Source-File</param>
+        /// <returns>XmlDocument object to represent the Xml-File</returns>
+        public XmlDocument LoadXmlFile(IFileInfo sourceFile)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            if (!sourceFile.Exists)
+            {
+                throw new FileNotFoundException($"XML-File: {sourceFile.FullName} doesn't exist!");
+            }
+
+            try
+            {
+                doc.Load(FileSys.File.OpenRead(sourceFile.FullName));
+            }catch(XmlException e)
+            {
+                throw new XmlException($"XML-File: {sourceFile.FullName} is corrupt!");
+            }
+
+            return doc;
+        }
+
 
 
     }
