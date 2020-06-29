@@ -4,8 +4,10 @@ using System.Linq;
 using System.IO.Abstractions;
 using System.Collections.ObjectModel;
 using System.IO.Compression;
-using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
+using System.IO;
+using Com.Ing.DiBa.NotfallExporterLib.Api;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -15,6 +17,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
     public class FileHandler : IFileHandler
     {
         public IFileSystem FileSys { get; set; }
+        public IMessenger Messenger { get; set; }
 
 
         /// <summary>
@@ -23,25 +26,13 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// </summary>
         /// <param name="sourceFile">file to backup</param>
         /// <param name="backupDirectory">Backup-Directory</param>
-        public void BackupFile(string sourceFile, string backupDirectory)
+        public void BackupFile(IFileInfo sourceFile, string backupDirectoryPath)
         {
-            DateTime currentDate = DateTime.Today;
-            string backupDirectoryPath = Path.Combine(backupDirectory, "Backup" + currentDate.ToString("dd_MM_yy"));
 
-            //creates a daily-directory in case it doesn't exist.
-            if (!FileSys.Directory.Exists(backupDirectoryPath))
-                FileSys.Directory.CreateDirectory(backupDirectoryPath);
-
-            string backupFilePath = Path.Combine(backupDirectoryPath, sourceFile.GetFileName());
-
-            if (FileSys.File.Exists(backupFilePath))
-                Log.Logger.Warn($"File: {backupFilePath.GetFileName()} already exists in Backup-Directory");
-            else
-            {
-                FileSys.File.Move(sourceFile, backupFilePath);
-                Log.Logger.Info($"File: {backupFilePath.GetFileName()} moved to Backup-Directory");
-            }
-
+            IDirectoryInfo backupDirectory = FileSys.DirectoryInfo.FromDirectoryName(backupDirectoryPath);
+            sourceFile.Refresh();
+            IFileBackup backup = new FileBackup(backupDirectory, FileSys);
+            backup.BackupFile(sourceFile);
         }
 
         /// <summary>
@@ -57,23 +48,20 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// checks wether the paths of a ExportModel exist.
         /// </summary>
         /// <param name="model">contains Export-Path Infromation</param>
-        public void checkModel(ExportModel model)
+        public bool CheckModel(ExportModel model)
         {
+            return CheckDirectoryPath(model.ErrorDirectory) && CheckDirectoryPath(model.ImportDirectory) &&
+                CheckDirectoryPath(model.BackupDirectory) && CheckFilePath(model.AccountConfig) && CheckFilePath(model.IdxIndexSpecification);
+        }
 
-            if (!FileSys.Directory.Exists(model.ErrorDirectory))
-                throw new DirectoryNotFoundException($"{model.ErrorDirectory} konnte nicht gefunden werden");
+        private bool CheckDirectoryPath(string directory)
+        {
+            return FileSys.Directory.Exists(directory);
+        }
 
-            if (!FileSys.Directory.Exists(model.ImportDirectory))
-                throw new DirectoryNotFoundException($"{model.ImportDirectory} konnte nicht gefunden werden");
-
-            if (!FileSys.Directory.Exists(model.BackupDirectory))
-                throw new DirectoryNotFoundException($"{model.BackupDirectory} konnte nicht gefunden werden");
-
-            if (!FileSys.File.Exists(model.AccountConfig))
-                throw new FileNotFoundException($"{model.AccountConfig} konnte nicht gefunden werden");
-
-            if (!FileSys.File.Exists(model.IdxIndexSpecification))
-                throw new FileNotFoundException($"{model.IdxIndexSpecification} konnte nicht gefunden werden");
+        private bool CheckFilePath(string file)
+        {
+            return FileSys.File.Exists(file);
         }
 
 
@@ -81,19 +69,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// Creates a Ready file from a given file.
         /// </summary>
         /// <param name="sourceFile">file to ceate a Ready-File from</param>
-        public void CreateReadyFile(string sourceFile)
+        public void CreateReadyFile(IFileInfo sourceFile)
         {
-
-            if (FileSys.File.Exists(sourceFile) && FileSys.File.Exists(Path.ChangeExtension(sourceFile, "idx")))
-            {
-                string readyFile = Path.ChangeExtension(sourceFile, "rdy");
-                FileSys.File.Create(readyFile);
-                Log.Logger.Info($"Rdy File created: {readyFile}");
-            }
-            else
-            {
-                Log.Logger.Error($"Could not create Rdy File for File: {sourceFile}");
-            }
+            sourceFile.Refresh();
+            IFileReady readyFile = new FileReady(sourceFile, FileSys);
+            readyFile.Create();
         }
 
         /// <summary>
@@ -104,6 +84,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         public IFileInfo[] GetImportFiles(string directoryPath)
         {
             IDirectoryInfo directory = FileSys.DirectoryInfo.FromDirectoryName(directoryPath);
+
+            if (!directory.Exists)
+            {
+                throw new DirectoryNotFoundException($"Error-Directory: {directory.FullName} doesn't exist!");
+            }
 
             List<IFileInfo> files = directory.GetFiles("*.eml", SearchOption.TopDirectoryOnly).ToList();
 
@@ -120,10 +105,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// </summary>
         /// <param name="zipFile">Zip-File to get the entries from</param>
         /// <returns>Collection of ZipEntries</returns>
-        public ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(string zipFile)
+        public ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(IFileInfo zipFile)
         {
-            using (ZipArchive archive = new ZipArchive(FileSys.File.OpenRead(zipFile), ZipArchiveMode.Read)) 
-            return archive.Entries;
+            zipFile.Refresh();
+            using (ZipArchive archive = new ZipArchive(FileSys.File.OpenRead(zipFile.FullName), ZipArchiveMode.Read))
+                return archive.Entries;
         }
 
         /// <summary>
@@ -131,37 +117,62 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         /// </summary>
         /// <param name="sourceFile">Email-File to convert</param>
         /// <param name="destDirectory">Destination-Directory</param>
-        public void ZipEmailFileTo(IFileInfo sourceFile, string destDirectory)
+        public IFileInfo ExportEmlFile(IFileInfo sourceFile, string destDirectoryPath)
         {
-            string zipFilePath = Path.Combine(destDirectory, Path.ChangeExtension(sourceFile.Name,".zip"));
+            IDirectoryInfo destDirectory = FileSys.DirectoryInfo.FromDirectoryName(destDirectoryPath);
 
+            IFileZip zip = new FileZip(sourceFile, FileSys);
 
+            return zip.ZipFile(destDirectory);
 
-            if (FileSys.File.Exists(zipFilePath))
-                Log.Logger.Warn($"File: {zipFilePath.GetFileName()} already exists in Import-Directory");
-            else
-                using (ZipArchive archive = new ZipArchive(FileSys.File.Create(zipFilePath), ZipArchiveMode.Create))
-                {
-                    ZipArchiveEntry zipElement = archive.CreateEntry(sourceFile.Name);
-
-                    using (MemoryStream originalFileMemoryStream = new MemoryStream(FileSys.File.ReadAllBytes(sourceFile.FullName)))
-                    {
-                        using (Stream zipElementStream = zipElement.Open())
-                        {
-                            originalFileMemoryStream.CopyTo(zipElementStream);
-                        }
-                    }
-                    Log.Logger.Info($"File: {sourceFile.Name} zipped");
-                }
         }
 
-        public void exportFile(IFileInfo sourceFile, string destDirectory)
+        /// <summary>
+        /// moves a file to the given Directory
+        /// </summary>
+        /// <param name="sourceFile">File to move</param>
+        /// <param name="destDirectory">Directory to move the file in</param>
+        public IFileInfo ExportZipFile(IFileInfo sourceFile, string destDirectoryPath)
         {
-            string destFilePath = Path.Combine(destDirectory, sourceFile.Name);
-            if (!FileSys.File.Exists(destFilePath))
+            IFileInfo zipFile = FileSys.FileInfo.FromFileName(Path.Combine(destDirectoryPath, sourceFile.Name));
+
+            if (!zipFile.Exists)
             {
-                FileSys.File.Copy(sourceFile.FullName, destFilePath);
+                FileSys.File.Copy(sourceFile.FullName, zipFile.FullName);
             }
+            else
+            {
+                Messenger.SendMessage($"{zipFile.Name} already exists!");
+            }
+            return zipFile;
         }
+
+        /// <summary>
+        /// loads and Xml-File
+        /// </summary>
+        /// <param name="sourceFile">IFileInfo object to represent the Source-File</param>
+        /// <returns>XmlDocument object to represent the Xml-File</returns>
+        public XmlDocument LoadXmlFile(IFileInfo sourceFile)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            if (!sourceFile.Exists)
+            {
+                throw new FileNotFoundException($"XML-File: {sourceFile.FullName} doesn't exist!");
+            }
+
+            try
+            {
+                doc.Load(FileSys.File.OpenRead(sourceFile.FullName));
+            }catch(XmlException e)
+            {
+                throw new XmlException($"XML-File: {sourceFile.FullName} is corrupt!");
+            }
+
+            return doc;
+        }
+
+
+
     }
 }

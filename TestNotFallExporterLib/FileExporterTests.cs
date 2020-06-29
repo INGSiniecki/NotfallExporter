@@ -1,6 +1,7 @@
-﻿using Com.Ing.DiBa.NotfallExporterLib;
-using Com.Ing.DiBa.NotfallExporterLib.Export;
+﻿
+using Com.Ing.DiBa.NotfallExporterLib.Api;
 using Com.Ing.DiBa.NotfallExporterLib.File;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 using System;
 using System.IO;
 using System.IO.Abstractions;
@@ -20,7 +21,7 @@ namespace TestNotFallExporterLib
             IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip");
 
             //Act
-            import.Start(file);
+            import.Start(new ExportFile(file));
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
@@ -37,7 +38,7 @@ namespace TestNotFallExporterLib
             IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\eml_20190220123417_99802_0000009200.eml");
 
             //Act
-            import.Start(file);
+            import.Start(new ExportFile(file));
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\eml_20190220123417_99802_0000009200.zip"));
@@ -53,7 +54,7 @@ namespace TestNotFallExporterLib
 
             IFileInfo file = _fileHandler.FileSys.FileInfo.FromFileName(@"C:\NotExisting.txt");
             //Act
-            Action a  = () => import.Start(file);
+            Action a  = () => import.Start(new ExportFile(file));
 
             //Assert
             Assert.Throws<FileNotFoundException>(a);

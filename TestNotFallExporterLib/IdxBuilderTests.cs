@@ -1,12 +1,10 @@
 ﻿using System;
 using Xunit;
-using System.IO.Abstractions.TestingHelpers;
-using System.Xml;
-using System.IO.Compression;
 using Com.Ing.DiBa.NotfallExporterLib.Idx;
 using Com.Ing.DiBa.NotfallExporterLib.File;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
 using System.IO;
+using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 
 namespace TestNotFallExporterLib
 {
@@ -20,10 +18,11 @@ namespace TestNotFallExporterLib
 
             XmlAccountConfig accountConfig = new XmlAccountConfig(@"c:\NotfallImporter\AccountConfig.xml", _fileHandler);
             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(@"c:\NotfallImporter\IdxIndexSpezifikation.xml", _fileHandler);
+            ExportFile exportFile = new ExportFile(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
 
             IdxBuilder idxBuilder = new IdxBuilder(accountConfig, indexSpecification, _fileHandler);
             //Act
-            IdxRepresentation idx = idxBuilder.BuildIdx(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", @"c:\NotfallImporter\Import");
+            IdxRepresentation idx = idxBuilder.BuildIdx(exportFile);
 
             //Assert
             Assert.True(_fileHandler.FileSys.File.Exists(@"c:\NotfallImporter\Import\vmi_20190304121156_99998_0000798569_0170631125_0123456789.idx"));
@@ -38,9 +37,10 @@ namespace TestNotFallExporterLib
             //Arrange
             XmlAccountConfig accountConfig = new XmlAccountConfig(@"c:\NotfallImporter\AccountConfig.xml", _fileHandler);
             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(@"c:\NotfallImporter\IdxIndexSpezifikation.xml", _fileHandler);
+            ExportFile exportFile = new ExportFile(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip"));
 
             IdxBuilder idxBuilder = new IdxBuilder(accountConfig, indexSpecification);
-            Action a = () => idxBuilder.BuildIdx(@"c:\NotfallImporter\Error\vmi_20190304121156_99998_0000798569_0170631125_0123456789.zip", @"Not Existing");
+            Action a = () => idxBuilder.BuildIdx(exportFile);
 
             //Act and Assert
             Assert.Throws<DirectoryNotFoundException>(a);

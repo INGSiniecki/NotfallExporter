@@ -1,16 +1,17 @@
-﻿using Com.Ing.DiBa.NotfallExporterLib;
-using Com.Ing.DiBa.NotfallExporterLib.Export;
+﻿
 using System;
-using System.Configuration;
+using System.Drawing;
 using System.Windows.Forms;
+using Com.Ing.DiBa.NotfallExporterLib.Api;
+using log4net;
 
 namespace NotfallExporterUI
 {
     public partial class Form1 : Form
     {
 
-        NotfallExportJob _importJob;
-
+        private NotfallExportJob _importJob;
+        private OutPutManager _outPutManager;
 
         public Form1()
         {
@@ -22,6 +23,10 @@ namespace NotfallExporterUI
             textBoxAccountConfig.Text = Properties.Settings.Default.AccountConfig;
             textBoxIndexSpezifikation.Text = Properties.Settings.Default.IdxIndexSpecification;
             textBoxError.Text = Properties.Settings.Default.ErrorDirectory;
+
+            log4net.Config.XmlConfigurator.Configure();
+
+            _outPutManager = new OutPutManager(textBoxOutPut);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -45,13 +50,36 @@ namespace NotfallExporterUI
 
             button_startImport.Enabled = true;
             button_stopImport.Enabled = false;
+            buttonStartDirectoryImport.Enabled = true;
 
             SetExportGuiEnabled(true);
         }
 
         private void button_startImport_Click(object sender, EventArgs e)
         {
-            ExportModel model = new ExportModel()
+            if (checkBoxOverrideLog.Checked)
+                _outPutManager.Clear();
+
+            _outPutManager.PrintText("Starting Directory-Export-Job...\n", Color.Blue);
+
+            ExportModel model = createExportModel();
+
+            DirectoryExporter exporter = new DirectoryExporter(model);
+            applyMessenging(exporter);
+
+            _importJob = new NotfallExportJob(exporter);
+            _importJob.StartJob();
+
+            button_stopImport.Enabled = true;
+            button_startImport.Enabled = false;
+            buttonStartDirectoryImport.Enabled = false;
+
+            SetExportGuiEnabled(false);
+        }
+
+        private ExportModel createExportModel()
+        {
+            return new ExportModel()
             {
                 ErrorDirectory = textBoxError.Text,
                 ImportDirectory = textBoxImport.Text,
@@ -59,23 +87,6 @@ namespace NotfallExporterUI
                 IdxIndexSpecification = textBoxIndexSpezifikation.Text,
                 AccountConfig = textBoxAccountConfig.Text
             };
-
-
-            DirectoryExporter importer = new DirectoryExporter(model);
-
-            importer.DirectoryExportEvent += (object eventSender, string exportedElement) => textBoxOutput.AppendText("Exported Directory: " + exportedElement + "\n");
-            importer.FileExportEvent += (object eventSender, string exportedElement) => textBoxOutput.AppendText("Exported File: " + exportedElement +"\n");
-
-            _importJob = new NotfallExportJob(importer);
-            _importJob.StartJob();
-
-           
-
-
-            button_stopImport.Enabled = true;
-            button_startImport.Enabled = false;
-
-            SetExportGuiEnabled(false);
         }
 
         private void SetExportGuiEnabled(bool enabled)
@@ -85,6 +96,7 @@ namespace NotfallExporterUI
             textBoxError.Enabled = enabled;
             textBoxImport.Enabled = enabled;
             textBoxBackup.Enabled = enabled;
+            checkBoxOverrideLog.Enabled = enabled;
         }
 
 
@@ -146,6 +158,28 @@ namespace NotfallExporterUI
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (checkBoxOverrideLog.Checked)
+                _outPutManager.Clear();
+
+            _outPutManager.PrintText("Starting Directory-Export...\n", Color.Blue);
+
+            ExportModel model = createExportModel();
+
+            DirectoryExporter exporter = new DirectoryExporter(model);
+            applyMessenging(exporter);
+
+            exporter.Start();
+        }
+
+        private void applyMessenging(DirectoryExporter exporter)
+        {
+            IMessenger messenger = new Messenger();
+            messenger.Message = _outPutManager.PrintMessage;
+            exporter.Messenger = messenger;
         }
     }
 }

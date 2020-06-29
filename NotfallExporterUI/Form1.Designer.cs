@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBoxError = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,8 +46,11 @@
             this.buttonAccountConfigDurchsuchen = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxAccountConfig = new System.Windows.Forms.TextBox();
-            this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.textBoxOutPut = new System.Windows.Forms.RichTextBox();
+            this.checkBoxOverrideLog = new System.Windows.Forms.CheckBox();
+            this.buttonStartDirectoryImport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxError
@@ -131,21 +135,21 @@
             // 
             // button_startImport
             // 
-            this.button_startImport.Location = new System.Drawing.Point(22, 423);
+            this.button_startImport.Location = new System.Drawing.Point(22, 392);
             this.button_startImport.Name = "button_startImport";
             this.button_startImport.Size = new System.Drawing.Size(96, 77);
             this.button_startImport.TabIndex = 17;
-            this.button_startImport.Text = "Start Import";
+            this.button_startImport.Text = "Start Import Job";
             this.button_startImport.UseVisualStyleBackColor = true;
             this.button_startImport.Click += new System.EventHandler(this.button_startImport_Click);
             // 
             // button_stopImport
             // 
-            this.button_stopImport.Location = new System.Drawing.Point(134, 423);
+            this.button_stopImport.Location = new System.Drawing.Point(142, 392);
             this.button_stopImport.Name = "button_stopImport";
             this.button_stopImport.Size = new System.Drawing.Size(96, 77);
             this.button_stopImport.TabIndex = 18;
-            this.button_stopImport.Text = "Stop Import";
+            this.button_stopImport.Text = "Stop Import Job";
             this.button_stopImport.UseVisualStyleBackColor = true;
             this.button_stopImport.Click += new System.EventHandler(this.button_stopImport_Click);
             // 
@@ -201,14 +205,6 @@
             this.textBoxAccountConfig.Size = new System.Drawing.Size(379, 26);
             this.textBoxAccountConfig.TabIndex = 22;
             // 
-            // textBoxOutput
-            // 
-            this.textBoxOutput.Location = new System.Drawing.Point(568, 65);
-            this.textBoxOutput.Multiline = true;
-            this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.Size = new System.Drawing.Size(650, 435);
-            this.textBoxOutput.TabIndex = 25;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -218,13 +214,49 @@
             this.label6.TabIndex = 26;
             this.label6.Text = "Ausgabe:";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // textBoxOutPut
+            // 
+            this.textBoxOutPut.Location = new System.Drawing.Point(572, 68);
+            this.textBoxOutPut.Name = "textBoxOutPut";
+            this.textBoxOutPut.Size = new System.Drawing.Size(654, 432);
+            this.textBoxOutPut.TabIndex = 28;
+            this.textBoxOutPut.Text = "";
+            // 
+            // checkBoxOverrideLog
+            // 
+            this.checkBoxOverrideLog.AutoSize = true;
+            this.checkBoxOverrideLog.Location = new System.Drawing.Point(572, 506);
+            this.checkBoxOverrideLog.Name = "checkBoxOverrideLog";
+            this.checkBoxOverrideLog.Size = new System.Drawing.Size(248, 24);
+            this.checkBoxOverrideLog.TabIndex = 29;
+            this.checkBoxOverrideLog.Text = "Vorheriges Log überschreiben";
+            this.checkBoxOverrideLog.UseVisualStyleBackColor = true;
+            // 
+            // buttonStartDirectoryImport
+            // 
+            this.buttonStartDirectoryImport.Location = new System.Drawing.Point(22, 489);
+            this.buttonStartDirectoryImport.Name = "buttonStartDirectoryImport";
+            this.buttonStartDirectoryImport.Size = new System.Drawing.Size(96, 77);
+            this.buttonStartDirectoryImport.TabIndex = 30;
+            this.buttonStartDirectoryImport.Text = "Import Directory";
+            this.buttonStartDirectoryImport.UseVisualStyleBackColor = true;
+            this.buttonStartDirectoryImport.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1259, 596);
+            this.Controls.Add(this.buttonStartDirectoryImport);
+            this.Controls.Add(this.checkBoxOverrideLog);
+            this.Controls.Add(this.textBoxOutPut);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.buttonAccountConfigDurchsuchen);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxAccountConfig);
@@ -268,8 +300,11 @@
         private System.Windows.Forms.Button buttonAccountConfigDurchsuchen;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxAccountConfig;
-        private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.RichTextBox textBoxOutPut;
+        private System.Windows.Forms.CheckBox checkBoxOverrideLog;
+        private System.Windows.Forms.Button buttonStartDirectoryImport;
     }
 }
 

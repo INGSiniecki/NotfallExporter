@@ -1,7 +1,10 @@
 ﻿
+
 using Com.Ing.DiBa.NotfallExporterLib.File;
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
+using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
-using Com.Ing.DiBa.NotfallExporterLib.Xml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -19,6 +22,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         private readonly IXmlIdxIndexSpecification _idxIndexSpecification;
         private readonly IXmlAccountConfig _accountConfig;
         private readonly IFileHandler _fileHandler;
+
 
 
         /// <summary>
@@ -46,17 +50,20 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         }
 
 
+
+
         /// <summary>
         /// Creates a IdxFile from the given File
         /// </summary>
-        /// <param name="sourceFile">file from which to create the Idx-File</param>
+        /// <param name="exportFile">file from which to create the Idx-File</param>
         /// <param name="destDirectory">Destination-Directory</param>
         /// <returns></returns>
-        public IdxRepresentation BuildIdx(string sourceFile, string destDirectory)
+        public IdxRepresentation BuildIdx(ExportFile exportFile)
         {
-            IdxRepresentation idx = new IdxRepresentation {
-                File = Path.Combine(destDirectory, sourceFile.GetFileName().RemoveFileExtension() + ".idx"),
-                Content = FillIdx(sourceFile)
+            IdxRepresentation idx = new IdxRepresentation
+            {
+                File = Path.ChangeExtension(exportFile.File.FullName.RemoveFileExtension(), "idx"),
+                Content = FillIdx(exportFile)
             };
 
             //write infos in the file
@@ -65,38 +72,43 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             return idx;
         }
 
-        private IdxContent FillIdx(string sourceFile)
+        private IdxContent FillIdx(ExportFile exportFile) 
         {
             IdxContent content = new IdxContent();
             content.Lines = new List<string>();
 
             XmlNode indexRoot = _idxIndexSpecification.GetIndexListNode();
 
-            XmlNode account = _accountConfig.GetAccountNode(sourceFile.ExtractMSN());
+            XmlNode account = _accountConfig.GetAccountNode(exportFile.Data.RoutingID);
 
-          
+            if (indexRoot == null)
+                throw new XmlException($"IdxIndexSpecification invalid!");
+
+            if(account == null)
+                throw new XmlException($"IdxIndexSpecification invalid!");
+
+
             //iterating through all entries in the zip file
-            foreach(ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(sourceFile))
+            foreach (ZipArchiveEntry entry in _fileHandler.getZipArchiveEntries(exportFile.File))
             {
-                content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, sourceFile));
+                content.Lines.Add(CreateIdxLine(entry.Name, indexRoot, account, exportFile));
             }
             return content;
         }
 
-
-        private string CreateIdxLine(string entryName, XmlNode indexRoot, XmlNode account, string sourceFile)
+        private string CreateIdxLine(string entryName, XmlNode indexRoot, XmlNode account, ExportFile exportFile)
         {
             StringBuilder line = new StringBuilder();
-            foreach(XmlNode index in indexRoot.ChildNodes)
+            foreach (XmlNode index in indexRoot.ChildNodes)
             {
-                foreach(XmlNode data in account.ChildNodes)
+                foreach (XmlNode data in account.ChildNodes)
                 {
                     //read data from AccountConfig
-                    if(index.InnerText.Equals(data.Name))
+                    if (index.InnerText.Equals(data.Name))
                         line.Append(data.InnerText);
 
 
-                    
+
                 }
 
                 //define dynamic data
@@ -105,8 +117,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
                     line.Append("1");
 
                 //VermittlerNr only in uploads
-                if (index.InnerText.Equals("VermittlerNr") && sourceFile.Split('_')[0].Equals("vmi"))
-                    sourceFile.GetVermittlerNr();
+                if (index.InnerText.Equals("VermittlerNr") && exportFile.Data.VermittlerID != null)
+                    line.Append(exportFile.Data.VermittlerID);
 
 
                 if (index.InnerText.Equals("PaginierNr"))

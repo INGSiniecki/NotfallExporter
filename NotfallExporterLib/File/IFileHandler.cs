@@ -1,33 +1,37 @@
 ﻿
+using Com.Ing.DiBa.NotfallExporterLib.Api;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
+using System.Xml;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
     public interface IFileHandler
     {
+        IMessenger Messenger { get; set; }
+
         IFileSystem FileSys { get; set; }
-
        
-        void CreateReadyFile(string sourceFile);
+        void CreateReadyFile(IFileInfo sourceFile);
 
-
-       
-        void ZipEmailFileTo(IFileInfo sourceFile, string destDirectory);
-
-       
-        ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(string zipFile);
+        ReadOnlyCollection<ZipArchiveEntry> getZipArchiveEntries(IFileInfo zipFile);
 
        
         IFileInfo[] GetImportFiles(string directoryPath);
 
        
-        void BackupFile(string sourceFile, string backupDirectory);
+        void BackupFile(IFileInfo sourceFile, string backupDirectoryPath);
 
       
-        void checkModel(ExportModel model);
+        bool CheckModel(ExportModel model);
 
-        void exportFile(IFileInfo sourceFile, string destDirectory);
+        IFileInfo ExportEmlFile(IFileInfo sourceFile, string destDirectoryPath);
+
+        IFileInfo ExportZipFile(IFileInfo sourceFile, string destDirectoryPath);
+
+        XmlDocument LoadXmlFile(IFileInfo sourceFile);
+
+
     }
 }

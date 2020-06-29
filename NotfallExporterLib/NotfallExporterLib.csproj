@@ -71,33 +71,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Event\DirectoryExportEventArgs.cs" />
-    <Compile Include="Event\FileExportEventArgs.cs" />
-    <Compile Include="Event\WarnEventArgs.cs" />
+    <Compile Include="Api\IMessenger.cs" />
+    <Compile Include="Api\Messenger.cs" />
+    <Compile Include="File\Export\ExportDataPattern.cs" />
+    <Compile Include="File\Export\ExportFile.cs" />
+    <Compile Include="File\Export\ExportFileData.cs" />
+    <Compile Include="File\Export\ExportFileDataBuilder.cs" />
+    <Compile Include="File\Export\EmlExportDataPattern.cs" />
+    <Compile Include="File\Export\IExportDataPattern.cs" />
+    <Compile Include="File\Export\VmiExportDataPattern.cs" />
+    <Compile Include="File\FileBackup.cs" />
     <Compile Include="File\FileHandler.cs" />
+    <Compile Include="File\FileZip.cs" />
+    <Compile Include="File\IFileBackup.cs" />
     <Compile Include="File\IFileHandler.cs" />
+    <Compile Include="File\FileReady.cs" />
+    <Compile Include="File\IFileReady.cs" />
+    <Compile Include="File\IFileZip.cs" />
     <Compile Include="Idx\IdxRepresentation.cs" />
     <Compile Include="Idx\IdxBuilder.cs" />
     <Compile Include="Idx\IdxContent.cs" />
     <Compile Include="Idx\IIdxBuilder.cs" />
-    <Compile Include="Export\IFileExport.cs" />
-    <Compile Include="Export\FileExporter.cs" />
-    <Compile Include="Export\ExportModel.cs" />
-    <Compile Include="Export\IDirectoryExporter.cs" />
-    <Compile Include="Export\INotfallExportJob.cs" />
+    <Compile Include="Api\IFileExporter.cs" />
+    <Compile Include="Api\FileExporter.cs" />
+    <Compile Include="Api\ExportModel.cs" />
+    <Compile Include="Api\IDirectoryExporter.cs" />
+    <Compile Include="Api\INotfallExportJob.cs" />
     <Compile Include="Util\Log.cs" />
-    <Compile Include="Export\DirectoryExporter.cs" />
-    <Compile Include="Export\NotfallExportJob.cs" />
+    <Compile Include="Api\DirectoryExporter.cs" />
+    <Compile Include="Api\NotfallExportJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\StringExtension.cs" />
-    <Compile Include="Xml\IXmlAccountConfig.cs" />
-    <Compile Include="Xml\IXmlIdxIndexSpecification.cs" />
-    <Compile Include="Xml\XmlAccountConfig.cs" />
-    <Compile Include="Xml\XmlConfig.cs" />
-    <Compile Include="Xml\XmlIdxIndexSpecification.cs" />
+    <Compile Include="File\Xml\IXmlAccountConfig.cs" />
+    <Compile Include="File\Xml\IXmlIdxIndexSpecification.cs" />
+    <Compile Include="File\Xml\XmlAccountConfig.cs" />
+    <Compile Include="File\Xml\XmlConfig.cs" />
+    <Compile Include="File\Xml\XmlIdxIndexSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

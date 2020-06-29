@@ -1,5 +1,7 @@
 ﻿
 
+using log4net;
+
 namespace Com.Ing.DiBa.NotfallExporterLib.Util
 {
     /// <summary>
@@ -7,6 +9,6 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Util
     /// </summary>
     public static class Log
     {
-         public static log4net.ILog Logger { get; } = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+         public static ILog Logger { get; set; } = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

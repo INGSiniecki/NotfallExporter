@@ -1,10 +1,11 @@
 ﻿
 
+using Com.Ing.DiBa.NotfallExporterLib.File.Export;
+
 namespace Com.Ing.DiBa.NotfallExporterLib.Idx
 {
     interface IIdxBuilder
     {
-        
-        IdxRepresentation BuildIdx(string sourceFile, string destDirectory);
+        IdxRepresentation BuildIdx(ExportFile exportFile);
     }
 }

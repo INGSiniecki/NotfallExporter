@@ -1,10 +1,9 @@
-﻿using Com.Ing.DiBa.NotfallExporterLib;
+﻿
+using Com.Ing.DiBa.NotfallExporterLib.Api;
 using Com.Ing.DiBa.NotfallExporterLib.File;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.Text;
 using Xunit;
 
 namespace TestNotFallExporterLib
@@ -32,7 +31,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.BackupFile(_testZipFile, _exportModel.BackupDirectory);
+            _fileHandler.BackupFile(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile), _exportModel.BackupDirectory);
 
             //Assert
             DateTime currentDate = DateTime.Today;
@@ -49,7 +48,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            Action a = () => _fileHandler.BackupFile(@"c:\NotExisting.txt", _exportModel.BackupDirectory);
+            Action a = () => _fileHandler.BackupFile(_fileHandler.FileSys.FileInfo.FromFileName(@"c:\NotExisting.txt"), _exportModel.BackupDirectory);
 
             Assert.Throws<FileNotFoundException>(a);
         }
@@ -61,7 +60,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.checkModel(_exportModel);
+            _fileHandler.CheckModel(_exportModel);
         }
 
         [Fact]
@@ -81,7 +80,7 @@ namespace TestNotFallExporterLib
 
 
             //Act
-            Action a = () => _fileHandler.checkModel(new ExportModel() { BackupDirectory = @"c:\NotExisting" });
+            Action a = () => _fileHandler.CheckModel(new ExportModel() { BackupDirectory = @"c:\NotExisting" });
 
             Assert.Throws<DirectoryNotFoundException>(a);
         }
@@ -95,7 +94,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys.File.Create(Path.Combine(_exportModel.ErrorDirectory, Path.ChangeExtension(Path.GetFileName(_testZipFile), "idx")));
 
             //Act
-            _fileHandler.CreateReadyFile(_testZipFile);
+            _fileHandler.CreateReadyFile(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile));
 
             //Assert
             string readyFile = Path.Combine(_exportModel.ErrorDirectory, Path.ChangeExtension(Path.GetFileName(_testZipFile), "rdy"));
@@ -109,7 +108,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.CreateReadyFile(_testZipFile);
+            _fileHandler.CreateReadyFile(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile));
 
             //Assert
             string readyFile = Path.Combine(_exportModel.ErrorDirectory, Path.ChangeExtension(Path.GetFileName(_testZipFile), "rdy"));
@@ -141,7 +140,7 @@ namespace TestNotFallExporterLib
             _fileHandler.FileSys = TestFileSystem.CreateFileSystem();
 
             //Act
-            _fileHandler.ZipEmailFileTo(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile), _exportModel.ImportDirectory);
+            _fileHandler.ExportEmlFile(_fileHandler.FileSys.FileInfo.FromFileName(_testZipFile), _exportModel.ImportDirectory);
 
             //Assert
             string zipFile = Path.Combine(_exportModel.ImportDirectory, Path.GetFileNameWithoutExtension(_testEmlFile) + ".zip");
