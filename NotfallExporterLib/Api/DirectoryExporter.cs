@@ -18,19 +18,24 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         /// <summary>
         /// contains Path-Information for exporting
         /// </summary>
-        public ExportModel ImportModel { get; }
-        public IMessenger Messenger { get; set; }
+        public ExportModel ExportModel { get; }
+
+        private readonly IFileExporter _fileExporter;
+
+        private IMessenger _messenger;
+        public IMessenger Messenger 
+        {
+            get => _messenger;
+            set 
+            {
+                _fileExporter.Messenger = value;
+                _messenger = value;
+                
+            }
+            
+        }
 
         private readonly IFileHandler _fileHandler;
-
-        /// <summary>
-        /// instantiate a new object of te DirectoryExporter-Class
-        /// </summary>
-        /// <param name="model">contains Path-Informations for exporting</param>
-        public DirectoryExporter(ExportModel model) : this(model, new FileHandler())
-        {
-
-        }
 
 
         /// <summary>
@@ -38,10 +43,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         /// </summary>
         /// <param name="model">contains Path-Informations for exporting</param>
         /// <param name="fileHandler">object for FileSystem operations</param>
-        public DirectoryExporter(ExportModel model, IFileHandler fileHandler)
+        public DirectoryExporter(IFileExporter fileExporter)
         {
-            ImportModel = model;
-            _fileHandler = fileHandler;
+            _fileExporter = fileExporter;
+            ExportModel = fileExporter.ExportModel;
+            _fileHandler = fileExporter.FileHandler;
         }
 
 
@@ -53,16 +59,14 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         public void Start()
         {
 
-            Log.Logger.Info($"Import has been started:\nError-Directory: {ImportModel.ErrorDirectory}\nImport-Directory: {ImportModel.ImportDirectory}\nBackup-Directory: {ImportModel.BackupDirectory}");
-            FileExporter fileExporter = new FileExporter(ImportModel, _fileHandler);
+            Log.Logger.Info($"Import has been started:\nError-Directory: {ExportModel.ErrorDirectory}\nImport-Directory: {ExportModel.ImportDirectory}\nBackup-Directory: {ExportModel.BackupDirectory}");
 
-            fileExporter.Messenger = Messenger;
-            _fileHandler.Messenger = Messenger;
+            
 
             try
             {
-                fileExporter.InitializeIdxBuilder();
-                StartExport(fileExporter);
+                _fileExporter.InitializeIdxBuilder();
+                StartExport();
             } catch (Exception e)
             {
                 Messenger.sendError(e);
@@ -70,20 +74,20 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         }
 
 
-        private void StartExport(FileExporter fileExporter)
+        private void StartExport()
         {
 
             long startTime = DateTime.Now.Millisecond;
             int fileImportCount = 0;
 
-            foreach (IFileInfo exportFileInfo in _fileHandler.GetImportFiles(ImportModel.ErrorDirectory))
+            foreach (IFileInfo exportFileInfo in _fileHandler.GetImportFiles(ExportModel.ErrorDirectory))
             {
                 ExportFile exportFile = new ExportFile(exportFileInfo);
                 exportFile.BuilData();
 
                 if (exportFile.Data != null)
                 {
-                    fileExporter.Start(exportFile);
+                    _fileExporter.Start(exportFile);
                     fileImportCount++;
                 }
                 else

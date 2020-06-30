@@ -142,7 +142,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
             }
             else
             {
-                Messenger.SendMessage($"{zipFile.Name} already exists!");
+                Messenger?.SendMessage($"{zipFile.Name} already exists!");
             }
             return zipFile;
         }

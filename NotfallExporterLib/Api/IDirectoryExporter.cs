@@ -4,7 +4,7 @@
 
 namespace Com.Ing.DiBa.NotfallExporterLib.Api
 {
-    interface IDirectoryExporter
+    public interface IDirectoryExporter
     {
 
         IMessenger Messenger { get; set; }

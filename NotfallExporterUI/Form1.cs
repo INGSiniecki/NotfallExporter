@@ -64,10 +64,11 @@ namespace NotfallExporterUI
 
             ExportModel model = createExportModel();
 
-            DirectoryExporter exporter = new DirectoryExporter(model);
-            applyMessenging(exporter);
+            FileExporter fileExporter = new FileExporter(model);
 
-            _importJob = new NotfallExportJob(exporter);
+            _importJob = new NotfallExportJob(fileExporter);
+            _importJob.Messenger = createMessenger();
+
             _importJob.StartJob();
 
             button_stopImport.Enabled = true;
@@ -169,17 +170,19 @@ namespace NotfallExporterUI
 
             ExportModel model = createExportModel();
 
-            DirectoryExporter exporter = new DirectoryExporter(model);
-            applyMessenging(exporter);
+            FileExporter fileExporter = new FileExporter(model);
+
+            IDirectoryExporter exporter = new DirectoryExporter(fileExporter);
+            exporter.Messenger = createMessenger();
 
             exporter.Start();
         }
 
-        private void applyMessenging(DirectoryExporter exporter)
+        private IMessenger createMessenger()
         {
             IMessenger messenger = new Messenger();
             messenger.Message = _outPutManager.PrintMessage;
-            exporter.Messenger = messenger;
+            return messenger;
         }
     }
 }

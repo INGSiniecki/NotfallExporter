@@ -17,10 +17,20 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
     {
 
         public ExportModel ExportModel { get; set; }
-        public IMessenger Messenger { get; set; }
 
-        private readonly IFileHandler _fileHandler;  
-        private IdxBuilder _idxBuilder;
+        private IMessenger _messenger;
+        public IMessenger Messenger 
+        { 
+            get => _messenger;
+            set
+            {
+                FileHandler.Messenger = value;
+                _messenger = value;
+            } 
+        }
+        public IFileHandler FileHandler { get; set; }
+
+        private IIdxBuilder _idxBuilder;
 
         /// <summary>
         /// instantiate a new object of the FileExporter-Class
@@ -29,7 +39,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         /// <param name="fileHandler">object for FileSystem operations</param>
         public FileExporter(ExportModel model, IFileHandler fileHandler)
         {
-            _fileHandler = fileHandler;
+            FileHandler = fileHandler;
 
             ExportModel = model;
         }
@@ -56,9 +66,9 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             {
                 _idxBuilder.BuildIdx(exportedFile);
 
-                _fileHandler.CreateReadyFile(exportedFile.File);
+                FileHandler.CreateReadyFile(exportedFile.File);
 
-                _fileHandler.BackupFile(sourceFile.File, ExportModel.BackupDirectory);
+                FileHandler.BackupFile(sourceFile.File, ExportModel.BackupDirectory);
 
                 Messenger?.SendMessage($"{sourceFile.File.Name} exported!");
             }catch(Exception e)
@@ -73,11 +83,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
             //creates the Import File
             if (sourceFile.Data.DoxisUser.Equals("eml"))
             {
-               exportedFile = _fileHandler.ExportEmlFile(sourceFile.File, ExportModel.ImportDirectory);
+               exportedFile = FileHandler.ExportEmlFile(sourceFile.File, ExportModel.ImportDirectory);
             }
             else
             {
-               exportedFile =  _fileHandler.ExportZipFile(sourceFile.File, ExportModel.ImportDirectory);
+               exportedFile =  FileHandler.ExportZipFile(sourceFile.File, ExportModel.ImportDirectory);
             }
             Log.Logger.Info($"File: {sourceFile.File.Name} imported to Import-Directory");
 
@@ -90,10 +100,10 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         public void InitializeIdxBuilder()
         {
 
-             XmlAccountConfig accountConfig = new XmlAccountConfig(ExportModel.AccountConfig, _fileHandler);
-             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(ExportModel.IdxIndexSpecification, _fileHandler);
+             XmlAccountConfig accountConfig = new XmlAccountConfig(ExportModel.AccountConfig, FileHandler);
+             XmlIdxIndexSpecification indexSpecification = new XmlIdxIndexSpecification(ExportModel.IdxIndexSpecification, FileHandler);
             
-            _idxBuilder = new IdxBuilder(accountConfig, indexSpecification, _fileHandler);
+            _idxBuilder = new IdxBuilder(accountConfig, indexSpecification, FileHandler);
         }
 
     }

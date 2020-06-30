@@ -15,7 +15,7 @@ namespace Com.Ing.DiBa.NotfallExporterLibTests
         {
             //Arrange
             ExportModel model = CreateModel();
-            DirectoryExporter importer = new DirectoryExporter(model, _fileHandler);
+            IFileExporter importer = new IFileExporter(model, _fileHandler);
 
             //Act
             importer.Start();

@@ -14,16 +14,29 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         /// <summary>
         /// object to export a directory
         /// </summary>
-        private readonly DirectoryExporter _notfallExporter;
+        private readonly IFileExporter _fileExporter;
+        private readonly IDirectoryExporter _directoryExporter;
         private FileSystemWatcher _watcher;
+
+        private IMessenger _messenger;
+        public IMessenger Messenger 
+        { 
+            get => _messenger;
+            set 
+            { 
+                _fileExporter.Messenger = value;
+                _messenger = value;
+            }
+        }
 
         /// <summary>
         /// instantiates a object of NotfallExportJob
         /// </summary>
-        /// <param name="notfallImporter">object to export a directory</param>
-        public NotfallExportJob(DirectoryExporter notfallImporter)
+        /// <param name="fileExporter">object to export a directory</param>
+        public NotfallExportJob(IFileExporter fileExporter)
         {
-            _notfallExporter = notfallImporter;
+            _fileExporter = fileExporter;
+            _directoryExporter = new DirectoryExporter(fileExporter);
         }
 
 
@@ -34,11 +47,11 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
         public void StartJob()
         {
 
-            _notfallExporter.Start();
+            _directoryExporter.Start();
 
 
             _watcher = new FileSystemWatcher(); 
-                _watcher.Path = _notfallExporter.ImportModel.ErrorDirectory;
+            _watcher.Path = _fileExporter.ExportModel.ErrorDirectory;
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -68,7 +81,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Api
 
 
         public void OnChanged(object source, FileSystemEventArgs e) =>
-            _notfallExporter.Start();
+            _directoryExporter.Start();
 
 
 
