@@ -25,51 +25,6 @@ namespace NotfallExporterUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("test")]
-        public string ErrorDirectory {
-            get {
-                return ((string)(this["ErrorDirectory"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("test")]
-        public string ImportDirectory {
-            get {
-                return ((string)(this["ImportDirectory"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("test")]
-        public string BackupDirectory {
-            get {
-                return ((string)(this["BackupDirectory"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("t")]
-        public string AccountConfig {
-            get {
-                return ((string)(this["AccountConfig"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("t")]
-        public string IdxIndexSpecification {
-            get {
-                return ((string)(this["IdxIndexSpecification"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("t")]
         public string Einstellung {
             get {
@@ -86,6 +41,51 @@ namespace NotfallExporterUI.Properties {
             }
             set {
                 this["Einstellung1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Programmierung\\ING\\Files\\Error")]
+        public string ErrorDirectory {
+            get {
+                return ((string)(this["ErrorDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Programmierung\\ING\\Files\\ImportDMS")]
+        public string ImportDirectory {
+            get {
+                return ((string)(this["ImportDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Programmierung\\ING\\Files\\Backup")]
+        public string BackupDirectory {
+            get {
+                return ((string)(this["BackupDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Programmierung\\ING\\AccountConfig.xml")]
+        public string AccountConfig {
+            get {
+                return ((string)(this["AccountConfig"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Programmierung\\ING\\IdxIndexSpezifikation.xml")]
+        public string IdxIndexSpecification {
+            get {
+                return ((string)(this["IdxIndexSpecification"]));
             }
         }
     }

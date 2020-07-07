@@ -4,6 +4,8 @@ using Com.Ing.DiBa.NotfallExporterLib.File;
 using Com.Ing.DiBa.NotfallExporterLib.File.Export;
 using Com.Ing.DiBa.NotfallExporterLib.File.Xml;
 using Com.Ing.DiBa.NotfallExporterLib.Util;
+using NotfallExporterLib.Database;
+using NotfallExporterLib.Database.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,6 +51,12 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
             _fileHandler = fileHandler;
         }
 
+        public void BuildDBIdx(IdxContent content)
+        {
+            foreach(string line in content.Lines)
+                SqliteDataAccess.SaveIdx(IdxDBBuilder.BuildIdxDBModel(line));
+        }
+
 
 
 
@@ -65,6 +73,8 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
                 File = Path.ChangeExtension(exportFile.File.FullName.RemoveFileExtension(), "idx"),
                 Content = FillIdx(exportFile)
             };
+
+            BuildDBIdx(idx.Content);
 
             //write infos in the file
             _fileHandler.FileSys.File.WriteAllText(idx.File, idx.Content.ToString());

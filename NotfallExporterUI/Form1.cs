@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Com.Ing.DiBa.NotfallExporterLib.Api;
 using log4net;
+using NotfallExporterLib.Database;
+using NotfallExporterLib.Database.Model;
 
 namespace NotfallExporterUI
 {
