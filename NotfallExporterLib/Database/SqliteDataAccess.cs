@@ -1,37 +1,58 @@
-﻿using Com.Ing.DiBa.NotfallExporterLib.Idx;
+﻿
 using Dapper;
 using NotfallExporterLib.Database.Model;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NotfallExporterLib.Database
 {
-    public class SqliteDataAccess
+    public class SqliteDataAccess : ISqliteDataAccess
     {
 
-        private static string save_statement = "insert into Idx (BCount, VorgangsartID,	VorgangsartName, ProduktName, Postkorb, PaginierNr, DokumentartID, " +
+        /// <summary>
+        /// database connection
+        /// </summary>
+        public IDbConnection DbConnection { get; set; }
+
+        public SqliteDataAccess()
+        {
+            DbConnection = new SQLiteConnection(LoadConnectionString());
+            DbConnection.Open();
+        }
+
+        public SqliteDataAccess(DbConnection connection)
+        {
+            DbConnection = connection;
+        }
+
+        ~SqliteDataAccess()
+        {
+            DbConnection.Close();
+        }
+
+        private const string save_statement = "insert into Idx (BCount, VorgangsartID,	VorgangsartName, ProduktName, Postkorb, PaginierNr, DokumentartID, " +
                     "MethodenID, KundenNr, KontoNr ,AbschlussDatum, BaufiVorgangsNr, Versandart, NameDerImageDatei, Igz, Gz, Original," +
                     " KreditkartenNr, PartnerNr, VermittlerNr, DMSDocClassId, ExterneNummer, ZuliefererID, BearbeitungsInfo, Prioritaet, " +
                     "Posteingangsdatum, Bearbeitungsprio, AS_DMSUEBERGABE_ID, MANDAT_ID) values (@BCount, @VorgangsartID,	@VorgangsartName, @ProduktName, @Postkorb, @PaginierNr, @DokumentartID, " +
                     "@MethodenID, @KundenNr, @KontoNr ,@AbschlussDatum, @BaufiVorgangsNr, @Versandart, @NameDerImageDatei, @Igz, @Gz, @Original," +
                     " @KreditkartenNr, @PartnerNr, @VermittlerNr, @DMSDocClassId, @ExterneNummer, @ZuliefererID, @BearbeitungsInfo, @Prioritaet, " +
                     "@Posteingangsdatum, @Bearbeitungsprio, @AS_DMSUEBERGABE_ID, @MANDAT_ID)  ";
-        public static void SaveIdx(IdxDBModel idx)
-        {
-            using(IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute(save_statement, idx);
 
-            }
+        /// <summary>
+        /// saves the content of a idx file in a sqlite database
+        /// </summary>
+        /// <param name="idx">object to contain idx content</param>
+        public void SaveIdx(IdxDBModel idx)
+        {
+                DbConnection.Execute(save_statement, idx);
         }
 
-        private static string LoadConnectionString(string id = "Default")
+
+
+        private string LoadConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }

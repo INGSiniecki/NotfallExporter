@@ -54,7 +54,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.Idx
         private void BuildDBIdx(IdxContent content)
         {
             foreach(string line in content.Lines)
-                SqliteDataAccess.SaveIdx(IdxDBBuilder.BuildIdxDBModel(line));
+                _fileHandler.DbService.SaveIdx(IdxDBBuilder.BuildIdxDBModel(line));
         }
 
 

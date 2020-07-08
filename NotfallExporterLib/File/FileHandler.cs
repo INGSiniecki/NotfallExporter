@@ -8,6 +8,7 @@ using Com.Ing.DiBa.NotfallExporterLib.Util;
 using System.IO;
 using Com.Ing.DiBa.NotfallExporterLib.Api;
 using System.Xml;
+using NotfallExporterLib.Database;
 
 namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
@@ -18,6 +19,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
     {
         public IFileSystem FileSys { get; set; }
         public IMessenger Messenger { get; set; }
+        public ISqliteDataAccess DbService { get; set; }
 
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
         public FileHandler()
         {
             FileSys = new FileSystem();
+            DbService = new SqliteDataAccess();
         }
 
 

@@ -1,5 +1,6 @@
 ﻿
 using Com.Ing.DiBa.NotfallExporterLib.Api;
+using NotfallExporterLib.Database;
 using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using System.IO.Compression;
@@ -9,6 +10,7 @@ namespace Com.Ing.DiBa.NotfallExporterLib.File
 {
     public interface IFileHandler
     {
+        ISqliteDataAccess DbService { get; set; }
         IMessenger Messenger { get; set; }
 
         IFileSystem FileSys { get; set; }
