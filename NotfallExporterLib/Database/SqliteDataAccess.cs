@@ -44,7 +44,7 @@ namespace NotfallExporterLib.Database
         /// <summary>
         /// saves the content of a idx file in a sqlite database
         /// </summary>
-        /// <param name="idx">object to contain idx content</param>
+        /// <param name="idx">object to contain idx content</param>DbConnection
         public void SaveIdx(IdxDBModel idx)
         {
                 DbConnection.Execute(save_statement, idx);

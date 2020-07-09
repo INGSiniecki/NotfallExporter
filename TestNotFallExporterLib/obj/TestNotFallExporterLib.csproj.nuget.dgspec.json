@@ -57,9 +57,29 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Autofac.Extras.Moq": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.35, )"
+            },
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[16.2.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.14.5, )"
             },
             "System.Data.SQLite": {
               "target": "Package",

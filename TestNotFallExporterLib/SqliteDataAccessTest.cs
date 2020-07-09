@@ -1,4 +1,5 @@
-﻿using NotfallExporterLib.Database;
+﻿using Autofac.Extras.Moq;
+using NotfallExporterLib.Database;
 using NotfallExporterLib.Database.Model;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,10 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
 using Xunit;
+using Dapper;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using Moq;
 
 namespace TestNotFallExporterLib
 {
@@ -56,6 +61,32 @@ namespace TestNotFallExporterLib
             Assert.Equal("Immobilienfinanzierung", vorgangsartName);
             Assert.Equal(500, bearbeitungsPrio);
 
+        }
+
+        [Fact]
+        public void testSaveIdxSuccesfull()
+        {
+            using(var mock = AutoMock.GetLoose())
+            {
+                string sql = "insert into Idx(BCount, VorgangsartID, VorgangsartName, ProduktName, Postkorb, PaginierNr, DokumentartID, " +
+                    "MethodenID, KundenNr, KontoNr ,AbschlussDatum, BaufiVorgangsNr, Versandart, NameDerImageDatei, Igz, Gz, Original," +
+                    " KreditkartenNr, PartnerNr, VermittlerNr, DMSDocClassId, ExterneNummer, ZuliefererID, BearbeitungsInfo, Prioritaet, " +
+                    "Posteingangsdatum, Bearbeitungsprio, AS_DMSUEBERGABE_ID, MANDAT_ID) values (@BCount, @VorgangsartID,	@VorgangsartName, @ProduktName, @Postkorb, @PaginierNr, @DokumentartID, " +
+                    "@MethodenID, @KundenNr, @KontoNr ,@AbschlussDatum, @BaufiVorgangsNr, @Versandart, @NameDerImageDatei, @Igz, @Gz, @Original," +
+                    " @KreditkartenNr, @PartnerNr, @VermittlerNr, @DMSDocClassId, @ExterneNummer, @ZuliefererID, @BearbeitungsInfo, @Prioritaet, " +
+                    "@Posteingangsdatum, @Bearbeitungsprio, @AS_DMSUEBERGABE_ID, @MANDAT_ID)";
+
+                string line = "1;51;Immobilienfinanzierung;Direkt-Baufinanzierung;;81.998020000009200.eml;22;;;;;;-5;;;;;;;;1808;;;;0;;500;;";
+                IdxDBModel idxModel = IdxDBBuilder.BuildIdxDBModel(line);
+
+                mock.Mock<IDbConnection>().Setup(x => x.Execute(sql, idxModel, null, null, null)).Returns(1);
+
+                ISqliteDataAccess dbService = mock.Create<SqliteDataAccess>();
+                dbService.SaveIdx(idxModel);
+
+                mock.Mock<IDbConnection>().Verify(x => x.Execute(sql, idxModel, null, null, null), Times.Exactly(1));
+
+            }
         }
 
         private DbConnection CreateInMemoryDatabase()
