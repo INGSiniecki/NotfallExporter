@@ -5,7 +5,7 @@ namespace NotfallExporterLib.Database
 {
     public interface ISqliteDataAccess
     {
-        IDbConnection DbConnection { get; set; }
+        IIdxDatabase Database { get; set; }
         void SaveIdx(IdxDBModel idx);
     }
 }

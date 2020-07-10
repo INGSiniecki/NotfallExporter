@@ -15,31 +15,26 @@ namespace NotfallExporterLib.Database
         /// <summary>
         /// database connection
         /// </summary>
-        public IDbConnection DbConnection { get; set; }
+        public IIdxDatabase Database { get; set; }
 
         public SqliteDataAccess()
         {
-            DbConnection = new SQLiteConnection(LoadConnectionString());
-            DbConnection.Open();
+            Database = new IdxDatabase();
         }
 
-        public SqliteDataAccess(DbConnection connection)
+        public SqliteDataAccess(IIdxDatabase database)
         {
-            DbConnection = connection;
+            Database = database;
         }
 
-        ~SqliteDataAccess()
-        {
-            DbConnection.Close();
-        }
 
-        private const string save_statement = "insert into Idx (BCount, VorgangsartID,	VorgangsartName, ProduktName, Postkorb, PaginierNr, DokumentartID, " +
+        private const string save_statement = "insert into Idx(BCount, VorgangsartID, VorgangsartName, ProduktName, Postkorb, PaginierNr, DokumentartID, " +
                     "MethodenID, KundenNr, KontoNr ,AbschlussDatum, BaufiVorgangsNr, Versandart, NameDerImageDatei, Igz, Gz, Original," +
                     " KreditkartenNr, PartnerNr, VermittlerNr, DMSDocClassId, ExterneNummer, ZuliefererID, BearbeitungsInfo, Prioritaet, " +
                     "Posteingangsdatum, Bearbeitungsprio, AS_DMSUEBERGABE_ID, MANDAT_ID) values (@BCount, @VorgangsartID,	@VorgangsartName, @ProduktName, @Postkorb, @PaginierNr, @DokumentartID, " +
                     "@MethodenID, @KundenNr, @KontoNr ,@AbschlussDatum, @BaufiVorgangsNr, @Versandart, @NameDerImageDatei, @Igz, @Gz, @Original," +
                     " @KreditkartenNr, @PartnerNr, @VermittlerNr, @DMSDocClassId, @ExterneNummer, @ZuliefererID, @BearbeitungsInfo, @Prioritaet, " +
-                    "@Posteingangsdatum, @Bearbeitungsprio, @AS_DMSUEBERGABE_ID, @MANDAT_ID)  ";
+                    "@Posteingangsdatum, @Bearbeitungsprio, @AS_DMSUEBERGABE_ID, @MANDAT_ID)";
 
         /// <summary>
         /// saves the content of a idx file in a sqlite database
@@ -47,14 +42,11 @@ namespace NotfallExporterLib.Database
         /// <param name="idx">object to contain idx content</param>DbConnection
         public void SaveIdx(IdxDBModel idx)
         {
-                DbConnection.Execute(save_statement, idx);
+                Database.SaveIdx(save_statement, idx);
         }
 
 
 
-        private string LoadConnectionString(string id = "Default")
-        {
-            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
-        }
+       
     }
 }

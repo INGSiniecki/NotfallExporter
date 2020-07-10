@@ -96,7 +96,9 @@
   <ItemGroup>
     <Compile Include="Api\IMessenger.cs" />
     <Compile Include="Api\Messenger.cs" />
+    <Compile Include="Database\IIdxDatabase.cs" />
     <Compile Include="Database\ISqliteDataAccess.cs" />
+    <Compile Include="Database\IdxDatabase.cs" />
     <Compile Include="Database\Model\IdxDBBuilder.cs" />
     <Compile Include="Database\Model\IdxDBModel.cs" />
     <Compile Include="Database\SqliteDataAccess.cs" />
